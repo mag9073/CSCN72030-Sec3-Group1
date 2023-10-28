@@ -130,6 +130,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="python_modules\interfaces\dashboard.ui" />
     <None Include="python_modules\interfaces\login.ui" />
     <None Include="python_modules\my_module.py" />
   </ItemGroup>

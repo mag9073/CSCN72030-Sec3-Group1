@@ -32,5 +32,8 @@
     <None Include="python_modules\interfaces\login.ui">
       <Filter>Source Files\python_modules\interfaces</Filter>
     </None>
+    <None Include="python_modules\interfaces\dashboard.ui">
+      <Filter>Source Files\python_modules\interfaces</Filter>
+    </None>
   </ItemGroup>
 </Project>
