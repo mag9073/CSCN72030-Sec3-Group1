@@ -44,5 +44,8 @@
     <None Include="python_modules\interfaces\recommendations.ui">
       <Filter>Source Files\python_modules\interfaces</Filter>
     </None>
+    <None Include="python_modules\interfaces\settings.ui">
+      <Filter>Source Files\python_modules\interfaces</Filter>
+    </None>
   </ItemGroup>
 </Project>
