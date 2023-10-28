@@ -35,5 +35,14 @@
     <None Include="python_modules\interfaces\dashboard.ui">
       <Filter>Source Files\python_modules\interfaces</Filter>
     </None>
+    <None Include="python_modules\interfaces\dataview.ui">
+      <Filter>Source Files\python_modules\interfaces</Filter>
+    </None>
+    <None Include="python_modules\interfaces\profile.ui">
+      <Filter>Source Files\python_modules\interfaces</Filter>
+    </None>
+    <None Include="python_modules\interfaces\recommendations.ui">
+      <Filter>Source Files\python_modules\interfaces</Filter>
+    </None>
   </ItemGroup>
 </Project>

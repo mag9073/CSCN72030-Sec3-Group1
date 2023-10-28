@@ -131,7 +131,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="python_modules\interfaces\dashboard.ui" />
+    <None Include="python_modules\interfaces\dataview.ui" />
     <None Include="python_modules\interfaces\login.ui" />
+    <None Include="python_modules\interfaces\profile.ui" />
+    <None Include="python_modules\interfaces\recommendations.ui" />
     <None Include="python_modules\my_module.py" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
