@@ -139,8 +139,9 @@ background-color: &quot;#D4D6CF&quot;; }</string>
     </property>
     <property name="styleSheet">
      <string notr="true">border-radius:20px;
-background-color: rgb(170, 255, 255);
-font: 14pt &quot;MS Shell Dlg 2&quot;;</string>
+background-color: #156548;
+font: 14pt &quot;MS Shell Dlg 2&quot;;
+color: #ffffff;</string>
     </property>
     <property name="text">
      <string>Help</string>

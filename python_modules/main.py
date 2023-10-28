@@ -60,6 +60,34 @@ class LoginScreen(QDialog):
                 # Display an error message for invalid user info
                 self.error.setText("Invalid username or password")
 
+# Second Screen - Dashboard Screen - class inheriting from QDialog class
+class DashboardScreen(QDialog):
+    def __init__(self, app):
+        super(DashboardScreen, self).__init__()
+
+        # Load dashboard interface
+        loadUi("./interfaces/dashboard.ui", self)    # Loading ui
+
+        # Connect settings button 'clicked' signal to the setting method
+        self.settings_button.clicked.connect(self.settingsButtonClicked)
+
+        # Store the app instance for later use
+        self.app = app
+
+
+    def settingsButtonClicked(self):
+
+        # Create Settings Screen instance
+        settingsScreen = SettingsScreen(self.app, dashboard_bgwidget=self.parentWidget())
+
+        print(self.parentWidget())
+
+        # Add settings screen to the widget stack
+        widget.addWidget(settingsScreen)
+
+        # Advance to the next screen (settings screen)
+        widget.setCurrentIndex(widget.currentIndex() + 1)              
+
 
 # Encapsulate all the code to only run in the main program
 if __name__ == "__main__":

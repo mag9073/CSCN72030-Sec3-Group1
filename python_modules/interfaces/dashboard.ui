@@ -38,7 +38,7 @@ background-color: &quot;#D4D6CF&quot;; }</string>
     <widget class="QLabel" name="brand_name">
      <property name="geometry">
       <rect>
-       <x>30</x>
+       <x>50</x>
        <y>30</y>
        <width>201</width>
        <height>71</height>
@@ -62,8 +62,9 @@ background-color: &quot;#D4D6CF&quot;; }</string>
      </property>
      <property name="styleSheet">
       <string notr="true">border-radius:20px;
-background-color: rgb(170, 255, 255);
-font: 14pt &quot;MS Shell Dlg 2&quot;;</string>
+background-color: #156548;
+font: 14pt &quot;MS Shell Dlg 2&quot;;
+color: #ffffff;</string>
      </property>
      <property name="text">
       <string>Help</string>
@@ -88,7 +89,7 @@ font: 14pt &quot;MS Shell Dlg 2&quot;;</string>
     <widget class="QLabel" name="greet_message">
      <property name="geometry">
       <rect>
-       <x>20</x>
+       <x>50</x>
        <y>100</y>
        <width>881</width>
        <height>61</height>
@@ -104,7 +105,7 @@ font: 14pt &quot;MS Shell Dlg 2&quot;;</string>
     <widget class="QLabel" name="greet_message_2">
      <property name="geometry">
       <rect>
-       <x>140</x>
+       <x>150</x>
        <y>190</y>
        <width>881</width>
        <height>61</height>
@@ -131,8 +132,9 @@ font: 14pt &quot;MS Shell Dlg 2&quot;;</string>
      </property>
      <property name="styleSheet">
       <string notr="true">border-radius:20px;
-background-color: rgb(170, 255, 255);
-font: 14pt &quot;MS Shell Dlg 2&quot;;</string>
+background-color: #156548;
+font: 14pt &quot;MS Shell Dlg 2&quot;;
+color: #ffffff;</string>
      </property>
      <property name="text">
       <string>Settings</string>
@@ -141,8 +143,8 @@ font: 14pt &quot;MS Shell Dlg 2&quot;;</string>
     <widget class="QFrame" name="frame">
      <property name="geometry">
       <rect>
-       <x>450</x>
-       <y>270</y>
+       <x>460</x>
+       <y>280</y>
        <width>261</width>
        <height>231</height>
       </rect>

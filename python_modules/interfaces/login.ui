@@ -24,7 +24,7 @@
    </property>
    <property name="styleSheet">
     <string notr="true">QWidget#bgwidget{
-background-color:qlineargradient(spread:pad, x1:0.091, y1:0.101636, x2:0.991379, y2:0.977, stop:0 rgba(209, 107, 165, 255), stop:1 rgba(255, 255, 255, 255));}</string>
+background-color: &quot;#D4D6CF&quot;; }</string>
    </property>
    <widget class="QLabel" name="label">
     <property name="geometry">
@@ -36,7 +36,7 @@ background-color:qlineargradient(spread:pad, x1:0.091, y1:0.101636, x2:0.991379,
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">font: 36pt &quot;MS Shell Dlg 2&quot;; color:rgb(255, 255, 255)</string>
+     <string notr="true">font: 36pt &quot;MS Shell Dlg 2&quot;; color: #000000</string>
     </property>
     <property name="text">
      <string>Login</string>
@@ -55,7 +55,7 @@ background-color:qlineargradient(spread:pad, x1:0.091, y1:0.101636, x2:0.991379,
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">font: 16pt &quot;MS Shell Dlg 2&quot;;color:rgb(255, 255, 255)</string>
+     <string notr="true">font: 16pt &quot;MS Shell Dlg 2&quot;;color: #000000;</string>
     </property>
     <property name="text">
      <string>Sign in to your existing account</string>
@@ -75,8 +75,9 @@ background-color:qlineargradient(spread:pad, x1:0.091, y1:0.101636, x2:0.991379,
     </property>
     <property name="styleSheet">
      <string notr="true">border-radius:20px;
-background-color: rgb(170, 255, 255);
-font: 14pt &quot;MS Shell Dlg 2&quot;;</string>
+background-color: #156548;
+font: 14pt &quot;MS Shell Dlg 2&quot;;
+color: #ffffff;</string>
     </property>
     <property name="text">
      <string>Log in</string>
@@ -92,8 +93,9 @@ font: 14pt &quot;MS Shell Dlg 2&quot;;</string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color:rgba(0,0,0,0);
-font: 12pt &quot;MS Shell Dlg 2&quot;;</string>
+     <string notr="true">background-color: #ffffff;
+font: 12pt &quot;MS Shell Dlg 2&quot;;
+</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="passwordfield">
@@ -106,7 +108,7 @@ font: 12pt &quot;MS Shell Dlg 2&quot;;</string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color:rgba(0,0,0,0);
+     <string notr="true">background-color: #fffff;
 font: 12pt &quot;MS Shell Dlg 2&quot;;</string>
     </property>
    </widget>
