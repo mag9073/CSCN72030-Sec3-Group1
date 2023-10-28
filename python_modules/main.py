@@ -1,7 +1,12 @@
 import sys
-from PyQt6 import QtWidgets
-from PyQt6.QtWidgets import QDialog, QLineEdit
+from PyQt6 import QtWidgets, QtGui
+from PyQt6.QtWidgets import QDialog, QLineEdit, QVBoxLayout
 from PyQt6.uic import loadUi
+from PyQt6.QtGui import QFont
+from PyQt6.QtCore import Qt
+import re
+
+from custom_components.py_toggle import PyToggle
 
 '''
 CSCN72030 F23 / Project III
@@ -89,6 +94,138 @@ class DashboardScreen(QDialog):
         widget.setCurrentIndex(widget.currentIndex() + 1)              
 
 
+# Second subscreen - Settings - class inheriting from QDialog class
+class SettingsScreen(QDialog):
+    def __init__(self, app, dashboard_bgwidget):
+        super(SettingsScreen, self).__init__()
+
+        loadUi("settings.ui", self)      # Loading ui
+
+        self.app = app
+
+        self.selected_color = "default" 
+
+        self.setting_bgwidget = self.color_dropmenu.parentWidget()
+        self.dashboard_bgwidget = dashboard_bgwidget
+
+        self.back_button.clicked.connect(self.backToMain)   # Return back to Main Page
+        # self.color_dropmenu.currentTextChanged.connect(self.changeBackgroundColor)
+
+        # # Add colors to dropdown menu for background change
+        # self.color_dropmenu.addItem("default")
+        # self.color_dropmenu.addItem("Grey")
+        # self.color_dropmenu.addItem("Pink")
+
+        # Create layout
+        self.layout = QVBoxLayout()
+
+        # Add Theme Toggle
+        self.toggle = PyToggle()
+
+        # Set font size slider range and steps
+        self.fontsize_adjuster.setRange(0, 2)
+        self.fontsize_adjuster.setSingleStep(1)
+        self.fontsize_adjuster.setValue(1)
+
+        self.fontsize_adjuster.valueChanged.connect(self.sliderValueChanged)
+
+        # Create a layout for your SettingScreen and add the PyToggle
+        self.layout.addWidget(self.toggle)
+        # Add other widgets to the layout as needed
+
+        # Set the layout for the SettingScreen
+        self.setLayout(self.layout)
+
+        self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+    # Connect the toggle to the background color change
+        self.toggle.stateChanged.connect(self.handleToggleState)
+
+
+
+    def backToMain(self):
+        widget.setCurrentIndex(widget.currentIndex() - 1)
+
+    # def changeBackgroundColor(self):
+    #     selected_color = self.color_dropmenu.currentText()
+    #     self.selected_color = selected_color
+    #     if selected_color == "default":
+    #         self.change("purple")
+    #     elif selected_color == "Grey":
+    #         self.change("grey")
+    #     elif selected_color == "Pink":
+    #         self.change("pink")
+
+    def change(self, color):
+        
+        # Change background color to different widgets
+        self.setting_bgwidget.setStyleSheet(f"background-color: {color};")
+        self.dashboard_bgwidget.setStyleSheet(f"background-color: {color};")
+        print(f"You changed to {color}")
+
+    def sliderValueChanged(self):
+        slider_value = self.fontsize_adjuster.value()
+        
+        # Map slider values to positions
+        position_mapping = {
+            0: 10,
+            1: 12,
+            2: 14
+        }
+
+        if slider_value in position_mapping:
+            font_size = position_mapping[slider_value]
+        else:
+            font_size = 12  # Default font size
+
+        font = QFont("Arial", font_size)
+
+        for index in range(widget.count()):
+            current_widget = widget.widget(index)
+            for label in current_widget.findChildren(QtWidgets.QLabel):
+                label.setFont(font)
+
+
+    # def toggleBackgroundColor(self):
+    #     if self.toggle.isChecked():
+    #         # Change the background color to a different color when the toggle is checked
+    #         self.change("lightblue")
+    #     else:
+    #         # Change the background color back to the default when the toggle is unchecked
+    #         self.change(self.selected_color)
+
+    #     print(f"Toggle is checked: {self.toggle.isChecked()}")
+
+    def handleToggleState(self, state):
+        print(f"Toggle state changed to {state}")
+
+        label_palette = QtGui.QPalette()
+
+        # Change the background color based on the state
+        if state:  # Toggle is checked
+            self.change("#000000")  # Change background color to black
+
+            # Change the text color to white for the background widget
+            self.setting_bgwidget.setStyleSheet("color: #FFFFFF;")
+            label_palette.setColor(QtGui.QPalette.ColorRole.WindowText, QtGui.QColor("white"))
+        else:  # Toggle is unchecked
+            self.change("#D4D6CF")  # Change background color back to the default
+
+            # Change the text color to the original color for the background widget
+            self.setting_bgwidget.setStyleSheet("color: #000000;")
+
+        # Apply the background widget's text color style to all labels in the app
+        label_style = self.setting_bgwidget.styleSheet()
+        for index in range(widget.count()):
+            current_widget = widget.widget(index)
+            for label in current_widget.findChildren(QtWidgets.QLabel):
+                current_style = label.styleSheet()
+                font_size_match = re.search(r'font-size:\s*(\d+)\s*px', current_style)
+                if font_size_match:
+                    font_size = font_size_match.group(1)
+                    label.setStyleSheet(f"font-size: {font_size}px; {label_style}")
+
+
 # Encapsulate all the code to only run in the main program
 if __name__ == "__main__":
     # Create QApplication instance to manage the whole application GUI
@@ -96,6 +233,9 @@ if __name__ == "__main__":
 
     # Create Login Screen instance which is a QDialog for the login screen
     login = LoginScreen(app)
+
+    # Create Dashboard Screen instance which is a QDialog for the dashboard screen
+    dashboard = DashboardScreen(app)
 
     # Create a QStackWidget to manage multiple screens
     widget = QtWidgets.QStackedWidget()
@@ -112,6 +252,9 @@ if __name__ == "__main__":
 
     # Show the widget on the screen
     widget.show()
+
+    # Create SettingScreen instance which takes app and dahsboard_bgwidget as its arguments
+    setting_screen = SettingsScreen(app, dashboard_bgwidget=dashboard.bgwidget)
     
     # Error handlings
     try:
