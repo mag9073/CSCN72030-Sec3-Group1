@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\python_modules">
+      <UniqueIdentifier>{9d993d0f-1f8d-4689-a144-90be1cc79e11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\python_modules\interfaces">
+      <UniqueIdentifier>{8aede587-5c50-4148-af0a-b82a9c642b22}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -26,5 +32,28 @@
     <ClInclude Include="authentication.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="python_modules\my_module.py">
+      <Filter>Source Files\python_modules</Filter>
+    </None>
+    <None Include="python_modules\interfaces\login.ui">
+      <Filter>Source Files\python_modules\interfaces</Filter>
+    </None>
+    <None Include="python_modules\interfaces\dashboard.ui">
+      <Filter>Source Files\python_modules\interfaces</Filter>
+    </None>
+    <None Include="python_modules\interfaces\dataview.ui">
+      <Filter>Source Files\python_modules\interfaces</Filter>
+    </None>
+    <None Include="python_modules\interfaces\profile.ui">
+      <Filter>Source Files\python_modules\interfaces</Filter>
+    </None>
+    <None Include="python_modules\interfaces\recommendations.ui">
+      <Filter>Source Files\python_modules\interfaces</Filter>
+    </None>
+    <None Include="python_modules\interfaces\settings.ui">
+      <Filter>Source Files\python_modules\interfaces</Filter>
+    </None>
   </ItemGroup>
 </Project>
