@@ -127,9 +127,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="authentication.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="authentication.h" />
     <None Include="python_modules\interfaces\dashboard.ui" />
     <None Include="python_modules\interfaces\dataview.ui" />
     <None Include="python_modules\interfaces\login.ui" />
