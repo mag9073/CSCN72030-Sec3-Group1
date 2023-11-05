@@ -6,7 +6,7 @@ using namespace std;
 *                     Professor:  Ahmed Salamah                              *
 *                                                                            *
 *	              BY:  Sudhan Dahake - Hangsihak Sin - Sierra Erb -          *
-*                      Michelle Novar - Saba Berenji                         *
+*                      Michelle Gordon - Saba Berenji                        *
 *               DATE:  September, 2023                                       *
 *        DESCRIPTION:  Project III - main.cpp file                           *
 *                                                                            *
