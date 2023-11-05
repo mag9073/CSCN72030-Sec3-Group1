@@ -127,7 +127,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AuthenticationFile.cpp" />
+    <ClCompile Include="DiseaseFile.cpp" />
+    <ClCompile Include="File.cpp" />
+    <ClCompile Include="HelpAndRecommendation.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="PatientFile.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AuthenticationFile.h" />
+    <ClInclude Include="DiseaseFile.h" />
+    <ClInclude Include="File.h" />
+    <ClInclude Include="HelpAndRecommendation.h" />
+    <ClInclude Include="PatientFile.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
