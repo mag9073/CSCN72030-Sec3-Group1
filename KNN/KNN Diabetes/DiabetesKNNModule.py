@@ -19,11 +19,12 @@ except ValueError:  # Already removed
     pass
 
 
+from KNNAbstract.abstract import DataFrameOperations, KNNOperations
 from KNNFiles.KNNFileOperations import ReadingPatientFile
 from KNNFiles.KNNFileOperations import SavingPredictedResults
 
 
-class CreateDataframe:
+class CreateDataframe(DataFrameOperations):
     def __init__(self):
         self.__df = pd.read_csv("diabetes.csv")
 
@@ -38,7 +39,7 @@ class CreateDataframe:
             self.__df.SkinThickness > 0) & (self.__df.Insulin > 0) & (self.__df.BMI > 0)]
 
 
-class TrainDiabeticModel:
+class TrainDiabeticModel(KNNOperations):
     def __init__(self, dataframe, patient_data):
         self.__df = dataframe
         self.__diabeticsPredictedResult = []
@@ -60,7 +61,7 @@ class TrainDiabeticModel:
         scaler = StandardScaler()
         x = scaler.fit_transform(x)
 
-        #data = np.hstack((x, np.reshape(y, (-1, 1))))
+        # data = np.hstack((x, np.reshape(y, (-1, 1))))
 
         return x, y
 
@@ -86,6 +87,5 @@ if (__name__) == "__main__":
 
     diabetes_result = TrainDiabeticModel(
         dataframe, patient_data).getPredictedResult()
-
 
     SavingPredictedResults("DiabetesResults.csv", diabetes_result).saveToFile()
