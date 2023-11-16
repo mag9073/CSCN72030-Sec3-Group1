@@ -7,6 +7,7 @@ import DashboardScreen from './assets/layouts/pages/DashboardScreen';
 import PatientProfileScreen from './assets/layouts/pages/PatientProfileScreen';
 import DataViewScreen from './assets/layouts/pages/DataViewScreen';
 import SettingsScreen from './assets/layouts/pages/SettingsScreen';
+import TrendsViewScreen from './assets/layouts/pages/TrendsViewScreen';
 
 class App extends React.Component {
   constructor(props) {
@@ -45,6 +46,7 @@ class App extends React.Component {
               />}
             />
             <Route path="/profile/dataview" element={<DataViewScreen isDarkMode={isDarkMode} />} />
+            <Route path="/profile/trendsview" element={<TrendsViewScreen isDarkMode={isDarkMode} />} />
             <Route path="/settings" element={<SettingsScreen isDarkMode={isDarkMode} />} />
           </Routes>
         </Router>
