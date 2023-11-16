@@ -14,8 +14,8 @@ class Searchbar extends React.Component {
         autoHighlight
         getOptionLabel={(option) => option.name}
         renderOption={(props, option) => (
-          <Box component='li' sx={{ '& > img': { flexShrink: 0 } }} {...props} className='flex  justify-around items-center bg-slate-300 border border-emerald-500'>
-            <div>
+          <Box key={option.id} component='li' sx={{ '& > img': { flexShrink: 0 } }} {...props} className='flex  justify-around items-center bg-slate-300 border border-emerald-500'>
+            <div >
               <p>Patient Name: {option.name}</p>
               <p>Patient Id: {option.id}</p>
               <p>DOB: {option.dob}</p>
@@ -50,10 +50,10 @@ const patients = [
     name: 'Kathryn', id: 1, dob: '2003-05-01'
   },
   {
-    name: 'Kathryn', id: 1, dob: '2003-05-01'
+    name: 'Kathryn', id: 2, dob: '2003-05-01'
   },
   {
-    name: 'Kathryn', id: 1, dob: '2003-05-01'
+    name: 'Kathryn', id: 3, dob: '2003-05-01'
   },
 
 ]
