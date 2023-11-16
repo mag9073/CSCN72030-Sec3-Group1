@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import DashboardScreen from './assets/layouts/pages/DashboardScreen';
 import PatientProfileScreen from './assets/layouts/pages/PatientProfileScreen';
 import DataViewScreen from './assets/layouts/pages/DataViewScreen';
+import SettingsScreen from './assets/layouts/pages/SettingsScreen';
 
 class App extends React.Component {
   constructor(props) {
@@ -44,6 +45,7 @@ class App extends React.Component {
               />}
             />
             <Route path="/profile/dataview" element={<DataViewScreen isDarkMode={isDarkMode} />} />
+            <Route path="/settings" element={<SettingsScreen isDarkMode={isDarkMode} />} />
           </Routes>
         </Router>
       </div>
