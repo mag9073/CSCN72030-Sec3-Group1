@@ -26,7 +26,7 @@ from KNNFiles.KNNFileOperations import SavingPredictedResults
 
 class CreateDataframe(DataFrameOperations):
     def __init__(self):
-        self.__df = pd.read_csv("diabetes.csv")
+        self.__df = pd.read_csv("KNNModule/KNNDiabetes/diabetes.csv")
 
         self.filterNoise()
 

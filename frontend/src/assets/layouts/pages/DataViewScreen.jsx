@@ -5,7 +5,6 @@ import Layout from '../Layout';
 import { Navigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import PatientProfileScreen from './PatientProfileScreen';
 
 class ApexChart extends React.Component {
   constructor(props) {
@@ -166,7 +165,7 @@ class RadialBarChart extends Component {
   }
 }
 
-export default class DataViewScreen extends PatientProfileScreen {
+export default class DataView extends Component {
 
   constructor() {
     super();
