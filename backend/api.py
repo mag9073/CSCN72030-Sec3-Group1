@@ -10,6 +10,7 @@ rootpath = os.path.join(os.getcwd(), '..')
 sys.path.append(rootpath)
 
 from KNNModule.KNNDiabetes.DiabetesKNNModule import *
+from AuthenticationModule.AuthenticationModule import *
 
 app = Flask(__name__)
 
