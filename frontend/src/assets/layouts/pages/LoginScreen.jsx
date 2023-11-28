@@ -1,73 +1,97 @@
 import React, { Component } from 'react';
 import { Navigate } from 'react-router-dom';
 import UIModule from '../UIModule';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
+
 
 export default class LoginScreen extends UIModule {
-    // Create Constructor 
-    constructor(props) {
-        super(props);
-        this.state = {
-            username: '',
-            password: '',
-            redirectToDashboard: false,
-          };
+  constructor(props) {
+    super(props);
+    this.state = {
+      username: '',
+      password: '',
+      redirectToDashboard: false,
+      error: null,
+      isLoading: false, 
+    };
 
-        // Binding event handlers
-        this.handleInputChange = this.handleInputChange.bind(this);
-        this.handleLogin = this.handleLogin.bind(this);
-    }
+    // Binding event handlers
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleLogin = this.handleLogin.bind(this);
+  }
 
-    // From Abstract class - concrete class
-    settingButtonClicked = () => {
-        console.log('Test');
-    }
+  // From Abstract class - concrete class
+  settingButtonClicked() {
+    console.log('Test');
+  }
 
-    handleInputChange = (e) => {
-        const { name, value } = e.target;
-        console.log(`Changing ${name} to ${value}`);
-        this.setState({ [name]: value });
-      };
-    
-      handleLogin = async (e) => {
-        e.preventDefault();
-      
-        const { username, password } = this.state;
-      
-        try {
-          const response = await fetch('http://localhost:5000/authenticate', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ username, password }),
-          });
-      
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          }
-      
-          const contentType = response.headers.get('content-type');
-          if (!contentType || !contentType.includes('application/json')) {
-            throw new Error('Invalid response from server. Please try again.');
-          }
-      
-          const data = await response.json();
-      
-          console.log(data.message); // Login successful
-          this.setState({ redirectToDashboard: true, error: null });
-        } catch (error) {
-          console.error('Error during login:', error);
-          this.setState({ error: 'An error occurred during login. Please try again.' });
+  handleInputChange(e) {
+    const { name, value } = e.target;
+    console.log(`Changing ${name} to ${value}`);
+    this.setState({ [name]: value });
+  }
+
+  handleLogin = async (e) => {
+    e.preventDefault();
+
+    const { username, password } = this.state;
+
+    this.setState({ isLoading: true }); // Set isLoading to true during authentication
+
+    try {
+      const response = await fetch('http://localhost:5000/authenticate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        console.error(`HTTP error! Status: ${response.status}`);
+        this.setState({ error: data.message, isLoading: true }); // Show loading for 2 seconds even in case of an error
+      } else {
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+          console.error('Invalid response from the server. Please try again.');
+          this.setState({ error: data.message, isLoading: true }); // Show loading for 2 seconds even in case of an error
+        } else if (data.message === 'Login successful') {
+          // Delay the redirect for 5 seconds
+          setTimeout(() => {
+            // Update state or perform any action before redirecting
+            console.log('Redirecting to dashboard after 5 seconds');
+
+            // Set redirectToDashboard to true for successful login
+            this.setState({ redirectToDashboard: true, error: null, isLoading: false });
+          }, 5000);
+        } else {
+          // Set the error message in case of unsuccessful login
+          this.setState({ error: data.message, isLoading: true }); // Show loading for 2 seconds even in case of an error
         }
-      };
+      }
+    } catch (error) {
+      console.error('An error occurred during authentication:', error);
+      this.setState({ error: 'An error occurred. Please try again.', isLoading: true }); // Show loading for 2 seconds even in case of an error
+    } finally {
+      // Reset isLoading to false after 2 seconds
+      setTimeout(() => {
+        this.setState({ isLoading: false });
+      }, 2000);
+    }
+  };
+  
+  
 
-      render() {
-        const { username, password, redirectToDashboard, error } = this.state;
+  render() {
+    const { username, password, redirectToDashboard, error, isLoading } = this.state;
 
-        if (redirectToDashboard) {
-          // Redirect to the "/dashboard" route upon successful login
-          return <Navigate to="/dashboard" />;
-        }
+    if (redirectToDashboard) {
+      // Redirect to the "/dashboard" route upon successful login
+      return <Navigate to="/dashboard" />;
+    }
     
         return (
           <div className='flex flex-col items-center justify-center h-screen w-screen gap-20'>
@@ -81,6 +105,7 @@ export default class LoginScreen extends UIModule {
                     <label
                       className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4"
                       htmlFor="inline-full-name"
+                      id='Username'
                     >
                       Username
                     </label>
@@ -102,6 +127,7 @@ export default class LoginScreen extends UIModule {
                     <label
                       className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4"
                       htmlFor="inline-password"
+                      id='Password'
                     >
                       Password
                     </label>
@@ -127,9 +153,19 @@ export default class LoginScreen extends UIModule {
                     <button
                       className="shadow bg-[#156548] hover:bg-[#156548] focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
                       type="submit"
+                      disabled={isLoading}
                     >
-                      Login
+                      {isLoading ? (
+                      <Box sx={{ display: 'flex' }}>
+                        <CircularProgress size={20} />
+                      </Box>
+                    ) : (
+                      'Login'
+                    )}
                     </button>
+                    {isLoading && (
+                      <p>Login...</p>
+                    )}
                   </div>
                   {error && <p className="text-red-500">{error}</p>}
                 </div>

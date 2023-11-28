@@ -3,6 +3,8 @@ import { Navigate } from 'react-router-dom';
 import Layout from '../Layout';
 import Button from '@mui/material/Button';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import { DarkModeContext } from '../../states/DarkModeContext'; // Adjust the import path based on your project structure
+import { FontSizeContext } from '../../states/FontSizeContext';
 
 class PatientProfileScreen extends React.Component {
   constructor(props) {
@@ -31,57 +33,74 @@ class PatientProfileScreen extends React.Component {
     }
 
     return (
-      <div>
-        <Layout>
-          <main className='flex items-center flex-col gap-4 md:h-4/6'>
-            {/* Create Search bar title */}
-            <div className='flex '>
-              <h2 className='font-semibold text-4xl'>Patient Profile</h2>
-            </div>
+      <DarkModeContext.Consumer>
+        {(darkModeContext) => (
+          <FontSizeContext.Consumer>
+            {(fontSizeContext) => {
+              const { isDarkMode } = darkModeContext;
+              const darkModeClass = isDarkMode ? 'dark' : 'light';
+              const { fontSize } = fontSizeContext;
 
-            {/* Back Button */}
-            <div className='flex gap-20 w-10/12 justify-between items-center flex-col md:flex-row'>
-              <div className='flex flex-col gap-10'>
-                <Button
-                  variant="outlined"
-                  startIcon={<ArrowBackIosIcon />}
-                  onClick={() => this.handleNavigate('/dashboard')}
-                >
-                  Patient Search
-                </Button>
-                {/* Patient information */}
-                <div>
-                  <p>{`Patient Name: Kathryn O'Rilley`}</p>
-                  <p>{`DOB: Sept 02, 1960`}</p>
-                  <p>{`Patient ID: 3291 9932`}</p>
-                  <p>{`Phone: 000-000-1111`}</p>
-                  <p>{`Email: rilleykath@gmail.com`}</p>
-                  <p>{`Address: 200 King Street, Toronto, ON, Canada`}</p>
-                  <p>{`Allegeries: Seafood`}</p>
+              return (
+                <div className={darkModeClass}>
+                  <Layout>
+                    <main className={`flex items-center flex-col gap-4 md:h-4/6 ${darkModeClass}`} style={{ fontSize: `${fontSize}px` }}>
+                      {/* Create Search bar title */}
+                      <div className='flex '>
+                        <h2 className='font-semibold text-4xl'>Patient Profile</h2>
+                      </div>
+
+                      {/* Back Button */}
+                      <div className='flex gap-20 md:w-10/12 justify-between items-center flex-col md:flex-row'>
+                        <div className='flex flex-col gap-10'>
+                          <div>
+                            <Button
+                              variant="outlined"
+                              startIcon={<ArrowBackIosIcon />}
+                              onClick={() => this.handleNavigate('/dashboard')}
+                              // style={`border-color: ${darkModeClass}`}
+                            >
+                              Patient Search
+                            </Button>
+                          </div>
+                          {/* Patient information */}
+                          <div>
+                            <p>{`Patient Name: Kathryn2`}</p>
+                            <p>{`DOB: Sept 02, 1960`}</p>
+                            <p>{`Patient ID: 3291 9932`}</p>
+                            <p>{`Phone: 000-000-1111`}</p>
+                            <p>{`Email: rilleykath2@gmail.com`}</p>
+                            <p>{`Address: 200 King Street, Toronto, ON, Canada`}</p>
+                            <p>{`Allegeries: Seafood`}</p>
+                          </div>
+                        </div>
+
+                        {/* Right items - buttons */}
+                        <div className='flex flex-col gap-10 pt-10'>
+                          <Button
+                            variant="outlined"
+                            onClick={() => this.handleNavigate(this.constructLink('/dataview'))}
+                            className='w-80 h-20'
+                          >
+                            View Lab Results & Risk Percentage
+                          </Button>
+                          <Button
+                            variant='outlined'
+                            onClick={() => this.handleNavigate(this.constructLink('/trendsview'))}
+                            className='w-80 h-20'
+                          >
+                            View Trend
+                          </Button>
+                        </div>
+                      </div>
+                    </main>
+                  </Layout>
                 </div>
-              </div>
-
-              {/* Right items - buttons */}
-              <div className='flex flex-col gap-10 pt-10'>
-                <Button
-                  variant="outlined"
-                  onClick={() => this.handleNavigate(this.constructLink('/dataview'))}
-                  className='w-80 h-20'
-                >
-                  View Lab Results & Risk Percentage
-                </Button>
-                <Button
-                  variant='outlined'
-                  onClick={() => this.handleNavigate(this.constructLink('/trendsview'))}
-                  className='w-80 h-20'
-                >
-                  View Trend
-                </Button>
-              </div>
-            </div>
-          </main>
-        </Layout>
-      </div>
+              );
+            }}
+          </FontSizeContext.Consumer>
+        )}
+      </DarkModeContext.Consumer>
     );
   }
 }

@@ -8,6 +8,9 @@ import PatientProfileScreen from './assets/layouts/pages/PatientProfileScreen';
 import DataViewScreen from './assets/layouts/pages/DataViewScreen';
 import SettingsScreen from './assets/layouts/pages/SettingsScreen';
 import TrendsViewScreen from './assets/layouts/pages/TrendsViewScreen';
+import { DarkModeProvider } from './assets/states/DarkModeContext';
+import { FontSizeProvider } from './assets/states/FontSizeContext';
+import ErrorScreen from './assets/layouts/pages/ErrorScreen';
 
 class App extends React.Component {
   constructor(props) {
@@ -17,40 +20,47 @@ class App extends React.Component {
     };
   }
 
-  handleDarkModeToggle = () => {
-    this.setState((prevState) => ({
-      isDarkMode: !prevState.isDarkMode,
-    }));
-  };
+  // handleDarkModeToggle = () => {
+  //   this.setState((prevState) => ({
+  //     isDarkMode: !prevState.isDarkMode,
+  //   }));
+  // };
 
   render() {
-
     const { isDarkMode } = this.state;
+    const darkModeClass = isDarkMode ? 'dark' : 'light';
 
     return (
-      <div>
-        <Router>
-          <Routes>
-            <Route path="/" element={<LoginScreen/>} />
-            <Route
-              path="/dashboard"
-              element={<DashboardScreen isDarkMode={isDarkMode} handleDarkModeToggle={this.handleDarkModeToggle} />}
-            />
-            <Route
-              path="/profile"
-              element={<PatientProfileScreen
-                location={this.props.location}
-                navigate={this.props.navigate}
-                isDarkMode={isDarkMode}
-                handleDarkModeToggle={this.handleDarkModeToggle}
-              />}
-            />
-            <Route path="/profile/dataview" element={<DataViewScreen isDarkMode={isDarkMode} />} />
-            <Route path="/profile/trendsview" element={<TrendsViewScreen isDarkMode={isDarkMode} />} />
-            <Route path="/settings" element={<SettingsScreen isDarkMode={isDarkMode} />} />
-          </Routes>
-        </Router>
-      </div>
+      <FontSizeProvider>
+      <DarkModeProvider>
+        <div className={darkModeClass}>
+          <Router>
+            <Routes>
+              <Route path="/" element={<LoginScreen />} />
+              <Route
+                path="/dashboard"
+                element={
+                  <DashboardScreen/>
+                }
+              />
+              <Route
+                path="/profile"
+                element={
+                  <PatientProfileScreen
+                    location={this.props.location}
+                    navigate={this.props.navigate}
+                  />
+                }
+              />
+              <Route path="/profile/dataview" element={<DataViewScreen/>} />
+              {/* <Route path="/profile/trendsview" element={<TrendsViewScreen />} /> */}
+              <Route path="/settings" element={<SettingsScreen />} />
+              <Route path='*' element={<ErrorScreen/>}/>
+            </Routes>
+          </Router>
+        </div>
+      </DarkModeProvider>
+      </FontSizeProvider>
     );
   }
 }

@@ -40,3 +40,26 @@
 .read-the-docs {
   color: #888;
 } */
+
+
+.light {
+  background-color: #fff;
+  color: #000;
+}
+
+.dark {
+  background-color: #333;
+  color: #fff;
+}
+
+.dark-mode .apexcharts-menu {
+  background-color: #333;
+  color: #FFF;
+  /* Add other styles as needed */
+}
+
+.light-mode .apexcharts-menu {
+  background-color: #FFF;
+  color: #000;
+  /* Add other styles as needed */
+}

@@ -1,36 +1,42 @@
-import React, { Component } from 'react'
-import Layout from '../Layout'
-import Searchbar from '../../components/Searchbar'
-import UIModule from '../UIModule'
+import React, { Component } from 'react';
+import Layout from '../Layout';
+import Searchbar from '../../components/Searchbar';
+import UIModule from '../UIModule';
+import { DarkModeContext } from '../../states/DarkModeContext';
 
-export default class DashboardScreen extends UIModule {
-    // Create Constructor 
-    constructor(props) {
-        super(props);
-    }
+class DashboardScreen extends UIModule {
+  constructor(props) {
+    super(props);
+  }
 
-    // Abstract class - concrete class
-    settingButtonClicked = () => {
-        console.log('Test');
-    }
+  settingButtonClicked = () => {
+    console.log('Test');
+  }
+
+  renderContent = (isDarkMode) => {
+    return (
+      <div className={`flex items-center justify-center flex-col gap-4 ${isDarkMode ? 'dark' : 'light'}`}>
+        <Layout>
+          <main className='flex items-center justify-center flex-col gap-4'>
+            <h2 className='font-semibold text-4xl'>Search for patient profile</h2>
+            <Searchbar />
+            {this.settingButtonClicked()}
+          </main>
+        </Layout>
+      </div>
+    );
+  };
 
   render() {
     return (
-      <div>
-        <Layout>
-            <main className='flex items-center justify-center flex-col gap-4'>
-                {/* Create Search bar title */}
-                <h2 className=' font-semibold text-4xl'>Search for patient profile</h2>
-
-                {/* Create Search Bar */}
-                <Searchbar/>
-
-                {/* Create Search Results with Scroll bar */}
-                {this.settingButtonClicked()}
-            </main>
-
-        </Layout>
-      </div>
-    )
+      <DarkModeContext.Consumer>
+        {(context) => {
+          const { isDarkMode } = context;
+          return this.renderContent(isDarkMode);
+        }}
+      </DarkModeContext.Consumer>
+    );
   }
 }
+
+export default DashboardScreen;
