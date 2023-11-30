@@ -12,6 +12,7 @@ sys.path.append(rootpath)
 from KNNModule.KNNDiabetes.DiabetesKNNModule import *
 from AuthenticationModule.AuthenticationModule import *
 from InputModule.Input_Module_Python import *
+from FileModule.AuthenticationFile.AuthenticationFile import *
 
 app = Flask(__name__)
 
@@ -38,20 +39,6 @@ def get_diabetes_prediction():
     return jsonify({"patient results": f'{final_patient_results}'})
 
 
-def read_user_credentials(filename): 
-    user_credentials = {} 
-    try: 
-        with open(filename, 'r') as file: 
-            for line in file: 
-                username, password = line.strip().split(',') 
-                user_credentials[username] = password 
-    except FileNotFoundError: 
-        print(f"Error: File '{filename}' not found.") 
-    except Exception as e: 
-        print(f"Error reading file: {e}") 
-    return user_credentials
-
-
 @app.route('/authenticate', methods=['POST'])
 def get_authentication():
        
@@ -64,7 +51,10 @@ def get_authentication():
     # Initialize Input Module object
     input_module = Input()
 
+    # Initialize File Module object
+    authenticate_file = AuthenticationFile()
 
+    # Error Handling for empty username or password
     if not username or not password:
         return jsonify({"message": "Username and password are required"}), 400
     
@@ -78,7 +68,7 @@ def get_authentication():
 
     file_name = 'AuthenticationModule/UserInfo.txt'
 
-    user_credentials_from_file = read_user_credentials(file_name)
+    user_credentials_from_file = authenticate_file.getFilename(file_name)
 
     auth_instance = Authentication(username_input, password_input, user_credentials_from_file)
 
