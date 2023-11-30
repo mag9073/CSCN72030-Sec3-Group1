@@ -16,9 +16,9 @@ except ValueError:  # Already removed
     pass
 
 
-from KNNAbstract.abstract import DataFrameOperations, KNNOperations
+from KNNFiles.KNNFileOperations import ReadingPatientFile
 from KNNFiles.KNNFileOperations import SavingPredictedResults
-
+from KNNAbstract.abstract import DataFrameOperations, KNNOperations
 
 class CreateDataframe(DataFrameOperations):
     def __init__(self, fileName):
@@ -57,7 +57,7 @@ class TrainHeartFailureModel(KNNOperations):
         scaler = StandardScaler()
         x = scaler.fit_transform(x)
 
-        #data = np.hstack((x, np.reshape(y, (-1, 1))))
+        # data = np.hstack((x, np.reshape(y, (-1, 1))))
 
         return x, y
 
@@ -71,7 +71,6 @@ class TrainHeartFailureModel(KNNOperations):
         patient_data = scaler.fit_transform(patient_data)
 
         self.__heartFailurePredictedResult = knn_model.predict(patient_data)
-
 
     def getPredictedResult(self):
         return self.__heartFailurePredictedResult
@@ -110,25 +109,20 @@ class FeatureAppropriationConversion:
 
 if __name__ == "__main__":
     dataframe = CreateDataframe("heartFailure.csv").getDataframe()
-    
 
     dataframe = FeatureAppropriationConversion.convertFeaturesToNumeric(
         dataframe)
-    
 
     patient_dataframe = CreateDataframe("PatientData.csv").getDataframe()
 
-
     patient_dataframe = FeatureAppropriationConversion.convertFeaturesToNumeric(
         patient_dataframe)
-    
 
-    patient_dataframe = patient_dataframe[patient_dataframe.columns[:]].values
-
+    patient_dataframe = ReadingPatientFile.returnDataframeValues(
+        patient_dataframe)
 
     heartFailure_result = TrainHeartFailureModel(
         dataframe, patient_dataframe).getPredictedResult()
-    
 
     SavingPredictedResults("HeartFailureResults.csv",
                            heartFailure_result).saveToFile()
