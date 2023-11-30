@@ -59,7 +59,7 @@ class HelpDialog extends Component {
     return (
       <Accordion className={darkModeClass}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header" className={darkModeClass}>
-          <Typography variant="h6" style={{ fontWeight: 'semi-bold' }} className={darkModeClass}>{nestedTitle}</Typography>
+          <Typography variant="h6" style={{ fontWeight: 'bold' }} className={darkModeClass}>{nestedTitle}</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Typography className={darkModeClass}>{nestedContent}</Typography>
@@ -72,7 +72,7 @@ class HelpDialog extends Component {
     return (
       <Accordion key={title} className={darkModeClass}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header" className={darkModeClass}>
-          <Typography variant="h6" style={{ fontWeight: 'semi-bold' }} className={darkModeClass}>{title}</Typography>
+          <Typography variant="h6" style={{ fontWeight: 'bold' }} className={darkModeClass}>{title}</Typography>
         </AccordionSummary>
         <AccordionDetails className={darkModeClass}>
           {content}
