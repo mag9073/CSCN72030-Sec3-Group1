@@ -1,5 +1,6 @@
 import pandas as pd
 
+
 class SavingPredictedResults:
     def __init__(self, fileName, predictedResult):
         self.__fileName = fileName
@@ -11,12 +12,14 @@ class SavingPredictedResults:
                 my_file.write(f"{element}")
 
 
-
 class ReadingPatientFile:
-    def __init__(self, fileName):
-        self.__fileName = fileName
+    # def __init__(self):
+    # self.__fileName
 
-    def readFromFile(self):
-        dataframe = pd.read_csv(self.__fileName)
+    def readFromFile(fileName):
+        dataframe = pd.read_csv(fileName)
 
-        return dataframe[dataframe.columns[ : ]].values
+        return dataframe[dataframe.columns[:]].values
+
+    def returnDataframeValues(dataframe):
+        return dataframe[dataframe.columns[:]].values
