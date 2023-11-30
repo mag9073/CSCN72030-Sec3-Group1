@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Navigate } from 'react-router-dom';
 import SettingsDialog from '../components/SettingsDialog';
+import HelpDialog from '../components/HelpDialog';
 
 export default class Layout extends React.Component {
 
@@ -38,9 +39,10 @@ export default class Layout extends React.Component {
             <div className='flex flex-col gap-4'>
             {/* Create Settings and Help buttons */}
                 <SettingsDialog/>
-                <button className='bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow w-40'>
+                {/* <button className='bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow w-40'>
                     Help
-                </button>
+                </button> */}
+                <HelpDialog/>
             </div>
 
         </div>
