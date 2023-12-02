@@ -20,12 +20,6 @@ class DiseaseFile(File):
     def __init__(self, fileInstance):
         self.__fileInstance = fileInstance
 
-    def setDiseaseData(self, fileInstance):
-        self.__fileInstance = fileInstance
-
-    def getDiseaseData(self):
-        return self.__fileInstance
-
     def saveToFile(self, fileName, predictedResult):
         with open(fileName, "w") as my_file:
             for element in predictedResult:
