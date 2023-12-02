@@ -68,7 +68,7 @@ def get_authentication():
     data = request.get_json()
 
 
-    username = data.get('username')
+    username = data.get('username').lower()
     password = data.get('password')
     
     # Initialize Input Module object
@@ -84,14 +84,14 @@ def get_authentication():
     # Pass username and password to the Input object
     input_module.set_username(username)
     input_module.set_password(password)
+    
+    f = File("FileModule/AuthenticationFile/credentials.csv")
 
     # Retreive username and password from the Input object
     username_input = input_module.get_username()
     password_input = input_module.get_password()
 
-    file_name = 'AuthenticationModule/UserInfo.txt'
-
-    user_credentials_from_file = authenticate_file.getFilename(file_name)
+    user_credentials_from_file = authenticate_file.readFromDoctorAuthenticatorFile(f.getFilename())
 
     auth_instance = Authentication(username_input, password_input, user_credentials_from_file)
 

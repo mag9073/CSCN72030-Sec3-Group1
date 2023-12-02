@@ -11,8 +11,23 @@ class PatientProfileScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      patientData: null,
       navigateTo: null,
     };
+  }
+
+  componentDidMount() {
+    // Retrieve patient data from localStorage when the component mounts
+    const savedPatientData = localStorage.getItem('patientData');
+    if (savedPatientData) {
+      this.setState({ patientData: JSON.parse(savedPatientData) });
+    }
+  }
+
+  componentDidUpdate() {
+    // Save patient data to localStorage whenever it changes
+    const { patientData } = this.state;
+    localStorage.setItem('patientData', JSON.stringify(patientData));
   }
 
   constructLink = (path) => {
@@ -25,15 +40,12 @@ class PatientProfileScreen extends React.Component {
   handleNavigate = (path) => {
     this.setState({ navigateTo: path });
   };
-
   render() {
     const { navigateTo } = this.state;
 
     if (navigateTo) {
       return <Navigate to={navigateTo} />;
     }
-
-    const patientId = location.pathname.split('/').pop();
 
     return (
       <DarkModeContext.Consumer>
@@ -45,20 +57,17 @@ class PatientProfileScreen extends React.Component {
                   const { isDarkMode } = darkModeContext;
                   const darkModeClass = isDarkMode ? 'dark' : 'light';
                   const { fontSize } = fontSizeContext;
-                  const { patientData } = patientContext;
+                  const { selectedPatientId, patientData } = patientContext;
+                  
 
-                  console.log(patientData)
-                  console.log(patientId)
                   return (
                     <div className={darkModeClass}>
                       <Layout>
                         <main className={`flex items-center flex-col gap-4 md:h-4/6 ${darkModeClass}`} style={{ fontSize: `${fontSize}px` }}>
-                          {/* Create Search bar title */}
                           <div className='flex '>
                             <h2 className='font-semibold text-4xl'>Patient Profile</h2>
                           </div>
 
-                          {/* Back Button */}
                           <div className='flex gap-20 md:w-10/12 justify-between items-center flex-col md:flex-row'>
                             <div className='flex flex-col gap-10'>
                               <div>
@@ -66,44 +75,40 @@ class PatientProfileScreen extends React.Component {
                                   variant="outlined"
                                   startIcon={<ArrowBackIosIcon />}
                                   onClick={() => this.handleNavigate('/dashboard')}
-                                  // style={`border-color: ${darkModeClass}`}
                                 >
                                   Patient Search
                                 </Button>
                               </div>
-                              {/* Patient information */}
-                              {console.log(patientData)}
-                              {console.log(patientId.slice(1))}
-                              {
-                              patientData &&
-                              patientData
-                                .filter((data) => data.Patient_ID === decodeURIComponent(patientId)) // Ignore the first character since it contains %
-                                .map((filteredData) => (
-                                  <div key={filteredData.Patient_ID}>
-                                    <p>{`Patient Name: ${filteredData.Patient_Name}`}</p>
-                                    <p>{`DOB: ${filteredData.DOB}`}</p>
-                                    <p>{`Patient ID: ${filteredData.Patient_ID}`}</p>
-                                    <p>{`Phone: ${filteredData.Phone}`}</p>
-                                    <p>{`Email: ${filteredData.Email}`}</p>
-                                    <p>{`Address: ${filteredData.Address}`}</p>
-                                    <p>{`Allergies: ${filteredData.Allergies}`}</p>
-                                  </div>
-                                ))
-                            }
+                              {selectedPatientId && patientData && (
+                                <div key={selectedPatientId}>
+                                  {patientData
+                                    .filter((data) => data.Patient_ID === selectedPatientId)
+                                    .map((filteredData) => (
+                                      <div key={filteredData.Patient_ID}>
+                                        <p>{`Patient Name: ${filteredData.Patient_Name}`}</p>
+                                        <p>{`DOB: ${filteredData.DOB}`}</p>
+                                        <p>{`Patient ID: ${filteredData.Patient_ID}`}</p>
+                                        <p>{`Phone: ${filteredData.Phone}`}</p>
+                                        <p>{`Email: ${filteredData.Email}`}</p>
+                                        <p>{`Address: ${filteredData.Address}`}</p>
+                                        <p>{`Allergies: ${filteredData.Allergies}`}</p>
+                                      </div>
+                                    ))}
                                 </div>
+                              )}
+                            </div>
 
-                            {/* Right items - buttons */}
                             <div className='flex flex-col gap-10 pt-10'>
                               <Button
                                 variant="outlined"
-                                onClick={() => this.handleNavigate(this.constructLink(`/${patientId}/dataview`))}
+                                onClick={() => this.handleNavigate(this.constructLink(`/dataview`))}
                                 className='w-80 h-20'
                               >
                                 View Lab Results & Risk Percentage
                               </Button>
                               <Button
                                 variant='outlined'
-                                onClick={() => this.handleNavigate(this.constructLink(`/${patientId}/trendsview`))}
+                                onClick={() => this.handleNavigate(this.constructLink(`/trendsview`))}
                                 className='w-80 h-20'
                               >
                                 View Trend

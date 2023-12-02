@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css'
 import LoginScreen from './assets/layouts/pages/LoginScreen';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
@@ -12,52 +11,57 @@ import { DarkModeProvider } from './assets/states/DarkModeContext';
 import { FontSizeProvider } from './assets/states/FontSizeContext';
 import ErrorScreen from './assets/layouts/pages/ErrorScreen';
 import RecommendationsScreen from './assets/layouts/pages/RecommendationsScreen';
-import { PatientProvider } from './assets/states/PatientContext';
+import PatientContextProvider from './assets/states/PatientContext';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       isDarkMode: false,
+      selectedPatient: null,
     };
   }
 
+  handleProfileClick = (patient) => {
+    this.setState({ selectedPatient: patient });
+  };
+
   render() {
-    const { isDarkMode } = this.state;
+    const { isDarkMode, selectedPatient } = this.state;
     const darkModeClass = isDarkMode ? 'dark' : 'light';
 
     return (
       <FontSizeProvider>
-      <DarkModeProvider>
-        <PatientProvider>
-        <div className={darkModeClass}>
-          <Router>
-            <Routes>
-              <Route path="/" element={<LoginScreen />} />
-              <Route
-                path="/dashboard"
-                element={
-                  <DashboardScreen/>
-                }
-              />
-              <Route
-                path="/profile/:patientId"
-                element={
-                  <PatientProfileScreen
-                    location={this.props.location}
-                    navigate={this.props.navigate}
+        <DarkModeProvider>
+          <PatientContextProvider>
+            <div className={darkModeClass}>
+              <Router>
+                <Routes>
+                  <Route path="/" element={<LoginScreen />} />
+                  <Route
+                    path="/dashboard"
+                    element={<DashboardScreen />}
                   />
-                }
-              />
-              <Route path="/profile/:patientId/dataview" element={<DataViewScreen/>} />
-              <Route path='profile/:patientId/trendsview' element={<TrendsViewScreen/>}/>
-              <Route path='/profile/:patientId/dataview/recommendation' element={<RecommendationsScreen/>}/>
-              <Route path='*' element={<ErrorScreen/>}/>
-            </Routes>
-          </Router>
-        </div>
-        </PatientProvider>
-      </DarkModeProvider>
+                  <Route
+                    path="/profile"
+                    element={
+                      <PatientProfileScreen
+                        location={this.props.location}
+                        navigate={this.props.navigate}
+                        selectedPatient={selectedPatient}
+                        onProfileClick={this.handleProfileClick}
+                      />
+                    }
+                  />
+                  <Route path="/profile/dataview" element={<DataViewScreen />} />
+                  <Route path='profile/trendsview' element={<TrendsViewScreen />} />
+                  <Route path='/profile/dataview/recommendation' element={<RecommendationsScreen />} />
+                  <Route path='*' element={<ErrorScreen />} />
+                </Routes>
+              </Router>
+            </div>
+          </PatientContextProvider>
+        </DarkModeProvider>
       </FontSizeProvider>
     );
   }

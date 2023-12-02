@@ -160,8 +160,4 @@ if __name__ == "__main__":
 
     print(t2)
 
-<<<<<<< HEAD
     print(t3)
-=======
-    print(t3)
->>>>>>> 81d056541af1796818ce6ca0d0ff167d5d98a2fc

@@ -535,7 +535,7 @@ class TrendsViewScreen extends Component {
                             startIcon={<ArrowBackIosIcon />}
                             onClick={() => this.handleNavigate('/profile')}
                           >
-                            Patient Search
+                            Patient Profile
                           </Button>
                         </div>
                       </div>
