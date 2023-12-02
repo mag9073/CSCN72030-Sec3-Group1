@@ -1,4 +1,3 @@
-// Import necessary dependencies
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 import TextField from '@mui/material/TextField';
@@ -20,6 +19,10 @@ class Searchbar extends React.Component {
     this.setState({ navigateTo: path });
   };
 
+  handleProfileClick = (patientId) => {
+    this.handleNavigate(`/profile`);
+  };
+
   render() {
     const { navigateTo } = this.state;
 
@@ -37,7 +40,7 @@ class Searchbar extends React.Component {
           return (
             <Autocomplete
               id='search-bar'
-              sx={{ width: 500}}
+              sx={{ width: 500 }}
               options={patients}
               autoHighlight
               getOptionLabel={(option) => option.name}
@@ -50,7 +53,7 @@ class Searchbar extends React.Component {
                   className={`flex justify-around items-center bg-slate-300 border border-emerald-500 ${darkModeClass}`}
                   onClick={() => this.handleProfileClick(option.id)}
                 >
-                  <div>
+                  <div className={darkModeClass}>
                     <p>Patient Name: {option.name}</p>
                     <p>Patient Id: {option.id}</p>
                     <p>DOB: {option.dob}</p>
@@ -68,11 +71,11 @@ class Searchbar extends React.Component {
                   label='Enter patient name, ID, or DOB'
                   inputProps={{
                     ...params.inputProps,
-                    autoComplete: 'new-password', // disable autocomplete and autofill
-                    style: { color: textColor }, // Set the text color for the input
+                    autoComplete: 'new-password', 
+                    style: { color: textColor }, 
                   }}
                   InputLabelProps={{
-                    style: { color: textColor }, // Set the text color for the label
+                    style: { color: textColor }, 
                   }}
                 />
               )}
@@ -82,11 +85,6 @@ class Searchbar extends React.Component {
       </DarkModeContext.Consumer>
     );
   }
-
-  handleProfileClick = (patientId) => {
-    // this.handleNavigate(`/patient/${patientId}`)
-    this.handleNavigate(`/profile`);
-  };
 }
 
 export default Searchbar;

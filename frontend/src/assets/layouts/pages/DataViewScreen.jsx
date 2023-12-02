@@ -153,10 +153,8 @@ class ApexChart extends React.Component {
           return (
             <div id="chart" className={darkModeClass}>
               <Chart
-              
-              options={{
-                ...this.state.options,
-                
+                options={{
+                  ...this.state.options,
                   xaxis: {
                     ...this.state.options.xaxis,
                     labels: {
@@ -181,8 +179,9 @@ class ApexChart extends React.Component {
                     labels: {
                       show: true,
                       style: {
-                        colors: yaxistext.color
-                      }}
+                        colors: yaxistext.color,
+                      },
+                    },
                   },
                   legend: {
                     ...this.state.options.legend,
@@ -251,31 +250,53 @@ export default class DataView extends Component {
         <Layout>
           <main className={`flex items-center flex-col gap-4 md:h-4/6 ${darkModeClass}`} style={{ fontSize: `${fontSize}px` }}>
             <div className='flex gap-20 md:w-10/12 justify-between items-center flex-col md:flex-row'>
-                  <div className='flex flex-col gap-10'>
-                    <Button
-                      variant="outlined"
-                      startIcon={<ArrowBackIosIcon />}
-                      onClick={() => this.handleNavigate('/profile')}
-                    >
-                      Patient Search
-                    </Button>
-                  </div>
-                </div>
+              <div className='flex flex-col gap-10'>
+                <Button
+                  variant="outlined"
+                  startIcon={<ArrowBackIosIcon />}
+                  onClick={() => this.handleNavigate('/profile')}
+                >
+                  Patient Search
+                </Button>
+              </div>
+            </div>
             <div className=' md:w-9/12'>
               <ApexChart />
-              {/* <div className='md:flex md:justify-center'>
-                <RadialBarChart {...chart1Props} />
-                {/* ... (similar modifications for other RadialBarCharts) 
-              </div> */}
-              <p>Prediction Results: {(this.state.actualResults)}</p>
+              {/* Diabetes Prediction Results */}
+
+              <div className='flex flex-col gap-8'>
+                <div>
+                  <p>Diabetes Prediction Results: {(this.state.actualResults)}</p>
+                  <Button variant="contained" color="primary">
+                    View Recommendations
+                  </Button>
+                </div>
+
+                {/* Heart Failure Prediction Results */}
+                <div>
+                  <p>Heart Failure Prediction Results: {(this.state.actualResults)}</p>
+                  <Button variant="contained" color="primary">
+                    View Recommendations
+                  </Button>
+                </div>
+
+                {/* Stroke Prediction Results */}
+                <div>
+                  <p>Stroke Prediction Results: {(this.state.actualResults)}</p>
+                  <Button variant="contained" color="primary">
+                    View Recommendations
+                  </Button>
+                </div>
+
+              </div>
             </div>
           </main>
         </Layout>
       </div>
     );
   }}
-  </FontSizeContext.Consumer>
-  )}
+</FontSizeContext.Consumer>
+)}
 </DarkModeContext.Consumer>
 );
 }

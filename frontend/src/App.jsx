@@ -11,6 +11,7 @@ import TrendsViewScreen from './assets/layouts/pages/TrendsViewScreen';
 import { DarkModeProvider } from './assets/states/DarkModeContext';
 import { FontSizeProvider } from './assets/states/FontSizeContext';
 import ErrorScreen from './assets/layouts/pages/ErrorScreen';
+import RecommendationsScreen from './assets/layouts/pages/RecommendationsScreen';
 
 class App extends React.Component {
   constructor(props) {
@@ -19,12 +20,6 @@ class App extends React.Component {
       isDarkMode: false,
     };
   }
-
-  // handleDarkModeToggle = () => {
-  //   this.setState((prevState) => ({
-  //     isDarkMode: !prevState.isDarkMode,
-  //   }));
-  // };
 
   render() {
     const { isDarkMode } = this.state;
@@ -53,8 +48,8 @@ class App extends React.Component {
                 }
               />
               <Route path="/profile/dataview" element={<DataViewScreen/>} />
-              {/* <Route path="/profile/trendsview" element={<TrendsViewScreen />} /> */}
-              <Route path="/settings" element={<SettingsScreen />} />
+              <Route path='profile/trendsview' element={<TrendsViewScreen/>}/>
+              <Route path='/profile/dataview/recommendation' element={<RecommendationsScreen/>}/>
               <Route path='*' element={<ErrorScreen/>}/>
             </Routes>
           </Router>

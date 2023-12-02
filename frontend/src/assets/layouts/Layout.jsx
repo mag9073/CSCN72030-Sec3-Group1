@@ -25,7 +25,7 @@ export default class Layout extends React.Component {
     }
     
     return (
-      <div className='w-screen h-screen p-4'>
+      <div className='w-full h-screen p-4'>
         <div className='flex justify-between'>
             {/* Left items */}
             <div className=''>
