@@ -1,9 +1,11 @@
 import React from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import { Box, Button } from '@mui/material';
 import { DarkModeContext } from '../states/DarkModeContext';
+import { withPatientContext } from '../states/PatientContext'; 
+import { PatientContext } from '../states/PatientContext';
 
 class Searchbar extends React.Component {
   constructor(props) {
@@ -20,14 +22,22 @@ class Searchbar extends React.Component {
   };
 
   handleProfileClick = (patientId) => {
-    this.handleNavigate(`/profile`);
+    console.log('Patient ID:', patientId);
+    const { navigate } = this.props;
+    this.handleNavigate(`/profile/${patientId}`);
   };
+  static contextType = PatientContext;
 
   render() {
     const { navigateTo } = this.state;
+    const { patientData } = this.props;
 
     if (navigateTo) {
       return <Navigate to={navigateTo} />;
+    }
+
+    if (!patientData) {
+      return <div>No patient data available.</div>;
     }
 
     return (
@@ -35,28 +45,33 @@ class Searchbar extends React.Component {
         {(context) => {
           const { isDarkMode } = context;
           const darkModeClass = isDarkMode ? 'dark' : 'light';
-          const textColor = isDarkMode ? 'white' : 'black'; // Set the text color based on dark mode
+          const textColor = isDarkMode ? 'white' : 'black';
+
+          // Add a check for patientData being defined
+          if (!patientData) {
+            return <div>No patient data available.</div>;
+          }
 
           return (
             <Autocomplete
               id='search-bar'
               sx={{ width: 500 }}
-              options={patients}
+              options={patientData}
               autoHighlight
-              getOptionLabel={(option) => option.name}
+              getOptionLabel={(option) => `${option.Address} - ${option.Allergies}`}
               renderOption={(props, option) => (
                 <Box
-                  key={option.id}
+                  key={option.Patient_ID}
                   component='li'
                   sx={{ '& > img': { flexShrink: 0 } }}
                   {...props}
                   className={`flex justify-around items-center bg-slate-300 border border-emerald-500 ${darkModeClass}`}
-                  onClick={() => this.handleProfileClick(option.id)}
+                  onClick={() => this.handleProfileClick(option.Patient_ID)}
                 >
                   <div className={darkModeClass}>
-                    <p>Patient Name: {option.name}</p>
-                    <p>Patient Id: {option.id}</p>
-                    <p>DOB: {option.dob}</p>
+                    <p>Patient Name: {option.Patient_Name}</p>
+                    <p>Patient Id: {option.Patient_ID}</p>
+                    <p>DOB: {option.DOB}</p>
                   </div>
                   <div>
                     <Button variant='contained' color='success'>
@@ -87,22 +102,5 @@ class Searchbar extends React.Component {
   }
 }
 
-export default Searchbar;
+export default withPatientContext(Searchbar);
 
-const patients = [
-  {
-    name: 'Kathryns',
-    id: 1,
-    dob: '2003-05-01',
-  },
-  {
-    name: 'Kathryna',
-    id: 2,
-    dob: '2003-05-01',
-  },
-  {
-    name: 'Kathryn2',
-    id: 3,
-    dob: '2003-05-01',
-  },
-];

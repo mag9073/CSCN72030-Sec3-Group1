@@ -13,12 +13,35 @@ from KNNModule.KNNDiabetes.DiabetesKNNModule import *
 from AuthenticationModule.AuthenticationModule import *
 from InputModule.Input_Module_Python import *
 from FileModule.AuthenticationFile.AuthenticationFile import *
+from FileModule.PatientFile.PatientFile import *
+from FileModule.Trends.Trends import *
 
 app = Flask(__name__)
 
 from flask_cors import CORS
 
 cors = CORS(app)
+
+@app.route('/search', methods=['GET'])
+def get_patient_profile():
+
+    f = File("FileModule/PatientFile/PatientProfile.csv")
+
+    p = PatientFile(f)
+
+    dict = p.FileToDict()
+
+    return jsonify(dict)
+
+@app.route('/trendsview', methods=['GET'])
+def get_trendsview_files():
+    t1 = Trends("Diabetes").readSampleAndGenerateFile()
+
+    t2 = Trends("HeartFailure").readSampleAndGenerateFile()
+
+    t3 = Trends("Stroke").readSampleAndGenerateFile()
+
+    return jsonify({'t1': t1, 't2': t2, 't3': t3})
 
 @app.route('/diabetes-prediction', methods=['GET'])
 def get_diabetes_prediction():

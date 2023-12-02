@@ -25,10 +25,15 @@ class Trends(File):
         return dataframe
 
     def readSampleAndGenerateFile(self):
+        dict1 = {}
+        dict2 = {}
+        dict3 = {}
+
+        tuple_dict = (dict1, dict2, dict3)
+
         if (self.__disease == "Diabetes"):
-            dict = {}
             headers = ["Year", "Pregnancies", "Glucose", "BloodPressure", "SkinThickness",
-                        "Insulin", "BMI", "DiabetesPedigreeFunction", "Age", "Outcome"]
+                       "Insulin", "BMI", "DiabetesPedigreeFunction", "Age", "Outcome"]
 
             random.seed(101)
 
@@ -36,71 +41,39 @@ class Trends(File):
             rand_num_6_months = random.randint(5, 390)
             rand_num_3_months = random.randint(5, 390)
 
-            dataframe = self.createDataframe("Diabetes_data.csv")
+            dataframe = self.createDataframe("FileModule/Trends/Diabetes_data.csv")
 
-            list = dataframe[dataframe.columns[ : ]].values
-
-            for index in range(0, len(headers)):
-                if (index == 0):
-                    dict[headers[index]] = "one year"
-
-                else:
-                    dict[headers[index]] = (list[rand_num_1_year])[index - 1]
-
-                df = pd.DataFrame([dict])
-
-                df.to_csv("DiabetesSample.csv", index=False)
+            list = dataframe[dataframe.columns[:]].values
 
             for index in range(0, len(headers)):
                 if (index == 0):
-                    dict[headers[index]] = "six months"
+                    dict1[headers[index]] = "one year"
 
                 else:
-                    dict[headers[index]] = (list[rand_num_6_months])[index - 1]
-
-            with open("DiabetesSample.csv", "a") as my_file:
-                string = ""
-                
-                for element in dict.values():
-                    if (string == ""):
-                        string = f"{element}"
-
-                    else:
-                        string = f"{string},{element}"
-
-                string = f"{string}\n"
-
-                my_file.write(string)
+                    dict1[headers[index]] = (list[rand_num_1_year])[index - 1]
 
 
 
             for index in range(0, len(headers)):
                 if (index == 0):
-                    dict[headers[index]] = "three months"
+                    dict2[headers[index]] = "six months"
 
                 else:
-                    dict[headers[index]] = (list[rand_num_3_months])[index - 1]
-
-            with open("DiabetesSample.csv", "a") as my_file:
-                string = ""
-
-                for element in dict.values():
-                    if (string == ""):
-                        string = f"{element}"
-
-                    else:
-                        string = f"{string},{element}"
-
-                string = f"{string}\n"
-
-                my_file.write(string)
+                    dict2[headers[index]] = (
+                        list[rand_num_6_months])[index - 1]
 
 
+            for index in range(0, len(headers)):
+                if (index == 0):
+                    dict3[headers[index]] = "three months"
+
+                else:
+                    dict3[headers[index]] = (
+                        list[rand_num_3_months])[index - 1]
 
 
         elif (self.__disease == "HeartFailure"):
-            dict = {}
-            headers = ["Year","Age", "Sex", "ChestPainType", "RestingBP", "Cholesterol", "FastingBS",
+            headers = ["Year", "Age", "Sex", "ChestPainType", "RestingBP", "Cholesterol", "FastingBS",
                        "RestingECG", "MaxHR", "ExerciseAngina", "Oldpeak", "ST_Slope", "HeartDisease"]
 
             random.seed(101)
@@ -109,65 +82,34 @@ class Trends(File):
             rand_num_6_months = random.randint(10, 700)
             rand_num_3_months = random.randint(10, 700)
 
-            dataframe = self.createDataframe("HeartFailure_data.csv")
+            dataframe = self.createDataframe("FileModule/Trends/HeartFailure_data.csv")
 
             list = dataframe[dataframe.columns[:]].values
 
             for index in range(0, len(headers)):
                 if (index == 0):
-                    dict[headers[index]] = "one year"
+                    dict1[headers[index]] = "one year"
 
-                else:    
-                    dict[headers[index]] = (list[rand_num_1_year])[index - 1]
-
-                df = pd.DataFrame([dict])
-
-                df.to_csv("HeartFailureSample.csv", index=False)
+                else:
+                    dict1[headers[index]] = (list[rand_num_1_year])[index - 1]
 
             for index in range(0, len(headers)):
                 if (index == 0):
-                    dict[headers[index]] = "six months"
+                    dict2[headers[index]] = "six months"
 
                 else:
-                    dict[headers[index]] = (list[rand_num_6_months])[index - 1]
-
-            with open("HeartFailureSample.csv", "a") as my_file:
-                string = ""
-
-                for element in dict.values():
-                    if (string == ""):
-                        string = f"{element}"
-
-                    else:
-                        string = f"{string},{element}"
-
-                string = f"{string}\n"
-
-                my_file.write(string)
+                    dict2[headers[index]] = (
+                        list[rand_num_6_months])[index - 1]
 
             for index in range(0, len(headers)):
                 if (index == 0):
-                    dict[headers[index]] = "three months"
+                    dict3[headers[index]] = "three months"
 
                 else:
-                    dict[headers[index]] = (list[rand_num_3_months])[index - 1]
-
-            with open("HeartFailureSample.csv", "a") as my_file:
-                string = ""
-
-                for element in dict.values():
-                    if (string == ""):
-                        string = f"{element}"
-
-                    else:
-                        string = f"{string},{element}"
-
-                string = f"{string}\n"
-
-                my_file.write(string)
+                    dict3[headers[index]] = (
+                        list[rand_num_3_months])[index - 1]
 
         elif (self.__disease == "Stroke"):
-            dict = {}
             headers = ["Year", "sex", "age", "hypertension", "heart_disease", "ever_married", "work_type",
                        "Residence_type", "avg_glucose_level", "bmi", "smoking_status", "stroke"]
 
@@ -177,63 +119,34 @@ class Trends(File):
             rand_num_6_months = random.randint(20300, 20600)
             rand_num_3_months = random.randint(20300, 20600)
 
-            dataframe = self.createDataframe("stroke_data.csv")
+            dataframe = self.createDataframe("FileModule/Trends/stroke_data.csv")
 
             list = dataframe[dataframe.columns[:]].values
 
             for index in range(0, len(headers)):
                 if (index == 0):
-                    dict[headers[index]] = "one year"
+                    dict1[headers[index]] = "one year"
 
                 else:
-                    dict[headers[index]] = (list[rand_num_1_year])[index - 1]
-
-                df = pd.DataFrame([dict])
-
-                df.to_csv("StrokeSample.csv", index=False)
+                    dict1[headers[index]] = (list[rand_num_1_year])[index - 1]
 
             for index in range(0, len(headers)):
                 if (index == 0):
-                    dict[headers[index]] = "six months"
+                    dict2[headers[index]] = "six months"
 
                 else:
-                    dict[headers[index]] = (list[rand_num_6_months])[index - 1]
-
-            with open("StrokeSample.csv", "a") as my_file:
-                string = ""
-
-                for element in dict.values():
-                    if (string == ""):
-                        string = f"{element}"
-
-                    else:
-                        string = f"{string},{element}"
-
-                string = f"{string}\n"
-
-                my_file.write(string)
+                    dict2[headers[index]] = (
+                        list[rand_num_6_months])[index - 1]
 
             for index in range(0, len(headers)):
                 if (index == 0):
-                    dict[headers[index]] = "three months"
+                    dict3[headers[index]] = "three months"
 
                 else:
-                    dict[headers[index]] = (list[rand_num_3_months])[index - 1]
+                    dict3[headers[index]] = (
+                        list[rand_num_3_months])[index - 1]
 
-            with open("StrokeSample.csv", "a") as my_file:
-                string = ""
-
-                for element in dict.values():
-                    if (string == ""):
-                        string = f"{element}"
-
-                    else:
-                        string = f"{string},{element}"
-
-                string = f"{string}\n"
-
-                my_file.write(string)
-        
+        return tuple_dict
 
 
 if __name__ == "__main__":
@@ -242,3 +155,9 @@ if __name__ == "__main__":
     t2 = Trends("HeartFailure").readSampleAndGenerateFile()
 
     t3 = Trends("Stroke").readSampleAndGenerateFile()
+
+    print(t1)
+
+    print(t2)
+
+    print(t3)

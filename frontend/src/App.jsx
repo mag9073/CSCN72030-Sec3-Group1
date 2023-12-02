@@ -12,6 +12,7 @@ import { DarkModeProvider } from './assets/states/DarkModeContext';
 import { FontSizeProvider } from './assets/states/FontSizeContext';
 import ErrorScreen from './assets/layouts/pages/ErrorScreen';
 import RecommendationsScreen from './assets/layouts/pages/RecommendationsScreen';
+import { PatientProvider } from './assets/states/PatientContext';
 
 class App extends React.Component {
   constructor(props) {
@@ -28,6 +29,7 @@ class App extends React.Component {
     return (
       <FontSizeProvider>
       <DarkModeProvider>
+        <PatientProvider>
         <div className={darkModeClass}>
           <Router>
             <Routes>
@@ -39,7 +41,7 @@ class App extends React.Component {
                 }
               />
               <Route
-                path="/profile"
+                path="/profile/:patientId"
                 element={
                   <PatientProfileScreen
                     location={this.props.location}
@@ -47,13 +49,14 @@ class App extends React.Component {
                   />
                 }
               />
-              <Route path="/profile/dataview" element={<DataViewScreen/>} />
-              <Route path='profile/trendsview' element={<TrendsViewScreen/>}/>
-              <Route path='/profile/dataview/recommendation' element={<RecommendationsScreen/>}/>
+              <Route path="/profile/:patientId/dataview" element={<DataViewScreen/>} />
+              <Route path='profile/:patientId/trendsview' element={<TrendsViewScreen/>}/>
+              <Route path='/profile/:patientId/dataview/recommendation' element={<RecommendationsScreen/>}/>
               <Route path='*' element={<ErrorScreen/>}/>
             </Routes>
           </Router>
         </div>
+        </PatientProvider>
       </DarkModeProvider>
       </FontSizeProvider>
     );

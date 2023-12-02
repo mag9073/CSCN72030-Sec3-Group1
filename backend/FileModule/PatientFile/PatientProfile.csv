@@ -1,4 +1,4 @@
 PatientName,DOB,PatientID,Phone,Email,Address,Allergies
 Kathryn O'Rilley,1970-03-12, P125656,000-000-1111,rilleykath@example.com,200 King Street Toronto ON Canada,Seafood
 Emily Johnson,Nov 06 1980,P123456,555-222-1111,emily.j@example.com,300 Queen Street Waterloo ON Canada,Penicillin
-Daniel Smith,Aug 02 1990,P789012,985-666-888,daniel.s@example.com,456 Maple Avenue Kitchener ON Canada,None
+Daniel Smith,Aug 02 1990,P789012,985-666-888,daniel.s@example.com,456 Maple Avenue Kitchener ON Canada,Peanut

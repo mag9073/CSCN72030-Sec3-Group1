@@ -86,6 +86,7 @@ class ApexChart extends React.Component {
       header: true,
       dynamicTyping: true,
       complete: (result) => {
+        console.log(result)
 
         const series = result.data.map((item) => ({
           name: item.Age + '-' + item.Sex, // Using a combination of Age and Sex as the name
