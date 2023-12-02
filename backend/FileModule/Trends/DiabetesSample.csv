@@ -1,4 +1,0 @@
-Year,Pregnancies,Glucose,BloodPressure,SkinThickness,Insulin,BMI,DiabetesPedigreeFunction,Age,Outcome
-one year,8.0,124.0,76.0,24.0,600.0,28.7,0.687,52.0,1.0
-six months,12.0,151.0,70.0,40.0,271.0,41.8,0.742,38.0,1.0
-three months,8.0,186.0,90.0,35.0,225.0,34.5,0.423,37.0,1.0
