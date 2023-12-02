@@ -21,7 +21,11 @@ class PatientFile(File):
         self.__fileObj = fileObj
 
     def FileToDict(self):
-        dict = {}
+        dict1 = {}
+        dict2 = {}
+        dict3 = {}
+
+        tuple_dict = (dict1, dict2, dict3)
 
 
         headers = ["Patient_Name", "DOB", "Patient_ID", "Phone", "Email", "Address", "Allergies"]
@@ -32,15 +36,11 @@ class PatientFile(File):
 
         patient_profile_list = dataframe[dataframe.columns[ : ]].values
 
-        for index_list in range(0, len(patient_profile_list)):
+        for list_index in range(0, len(patient_profile_list)):
             for index in range(0, len(headers)):
-                if (index_list == 0):
-                    dict[headers[index]] = []
+                (tuple_dict[list_index])[headers[index]] = (patient_profile_list[list_index])[index]
 
-                dict[headers[index]].append((patient_profile_list[index_list])[index])
-
-
-        return dict
+        return tuple_dict
     
 
 if __name__ == "__main__":
@@ -48,6 +48,6 @@ if __name__ == "__main__":
 
     p = PatientFile(f)
 
-    dict = p.FileToDict()
+    tuple_dict = p.FileToDict()
 
-    print(dict)
+    print(tuple_dict)

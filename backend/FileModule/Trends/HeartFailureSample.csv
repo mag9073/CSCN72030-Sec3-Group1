@@ -1,4 +1,0 @@
-Year,Age,Sex,ChestPainType,RestingBP,Cholesterol,FastingBS,RestingECG,MaxHR,ExerciseAngina,Oldpeak,ST_Slope,HeartDisease
-one year,55.0,0.0,-1.0,130.0,262.0,0.0,-1.0,155.0,0.0,0.0,-1.0,0.0
-six months,54.0,0.0,1.0,125.0,216.0,0.0,-1.0,140.0,0.0,0.0,0.0,1.0
-three months,56.0,0.0,1.0,130.0,283.0,1.0,1.0,103.0,1.0,1.6,1.0,1.0
