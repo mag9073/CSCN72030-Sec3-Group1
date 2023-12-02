@@ -1,3 +1,4 @@
+
 import random
 
 import sys
@@ -46,3 +47,4 @@ if __name__ == "__main__":
     auth = a.readFromDoctorAuthenticatorFile(f.getFilename())
 
     print(auth)
+

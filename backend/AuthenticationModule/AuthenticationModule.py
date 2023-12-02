@@ -22,6 +22,7 @@ class Authentication:
         self.password_ = input_password
         self.username_password_map_ = data_map
 
+
     # defining the setters and getters for the attributes
     def set_username(self, input_username):
         self.username_ = input_username

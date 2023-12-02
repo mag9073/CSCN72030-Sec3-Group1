@@ -11,6 +11,8 @@ sys.path.append(rootpath)
 
 from KNNModule.KNNDiabetes.DiabetesKNNModule import *
 from AuthenticationModule.AuthenticationModule import *
+from InputModule.Input_Module_Python import *
+from FileModule.AuthenticationFile.AuthenticationFile import *
 
 app = Flask(__name__)
 
@@ -27,7 +29,7 @@ def get_diabetes_prediction():
     diabetes_result = TrainDiabeticModel(dataframe, patient_data).getPredictedResult()
 
     result_file_path = "KNNModule/KNNDiabetes/DiabetesResults.csv"
-    SavingPredictedResults(result_file_path, diabetes_result).saveToFile()
+    # SavingPredictedResults(result_file_path, diabetes_result).saveToFile()
 
     patient_results = ReadingPatientFile(result_file_path).readFromFile()
 
@@ -37,31 +39,46 @@ def get_diabetes_prediction():
     return jsonify({"patient results": f'{final_patient_results}'})
 
 
-# @app.route('/authenticate', methods=['POST'])
-# def get_authentication():
+@app.route('/authenticate', methods=['POST'])
+def get_authentication():
        
-#     data = request.get_json()
+    data = request.get_json()
 
 
-#     username_input = data.get('username')
-#     password_input = data.get('password')
-
-#     if not username_input or not password_input:
-#         return jsonify({"message": "Username and password are required"}), 400
+    username = data.get('username')
+    password = data.get('password')
     
+    # Initialize Input Module object
+    input_module = Input()
 
-#     file_name = 'Authentication/UserInfo.txt'
-#     user_credentials_from_file = read_user_credentials(file_name)
+    # Initialize File Module object
+    authenticate_file = AuthenticationFile()
 
-#     auth_instance = Authentication(username_input, password_input, user_credentials_from_file)
+    # Error Handling for empty username or password
+    if not username or not password:
+        return jsonify({"message": "Username and password are required"}), 400
+    
+    # Pass username and password to the Input object
+    input_module.set_username(username)
+    input_module.set_password(password)
 
-#     if auth_instance.log_in():
-#         return jsonify({"message": "Login successful"}), 200
-#     else:
-#         if not auth_instance.authenticate_username():
-#             return jsonify({"message": "Username not found"}), 401
-#         elif not auth_instance.authenticate_password():
-#             return jsonify({"message": "Password incorrect"}), 401
+    # Retreive username and password from the Input object
+    username_input = input_module.get_username()
+    password_input = input_module.get_password()
+
+    file_name = 'AuthenticationModule/UserInfo.txt'
+
+    user_credentials_from_file = authenticate_file.getFilename(file_name)
+
+    auth_instance = Authentication(username_input, password_input, user_credentials_from_file)
+
+    if auth_instance.log_in():
+        return jsonify({"message": "Login successful"}), 200
+    else:
+        if not auth_instance.authenticate_username():
+            return jsonify({"message": "Username not found"}), 401
+        elif not auth_instance.authenticate_password():
+            return jsonify({"message": "Password incorrect"}), 401
 
 if __name__ == "__main__":
     app.run(debug=True)
