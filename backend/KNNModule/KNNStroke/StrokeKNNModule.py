@@ -17,7 +17,6 @@ try:
 except ValueError:  # Already removed
     pass
 
-from KNNFiles.KNNFileOperations import DiseaseFile
 from KNNAbstract.abstract import DataFrameOperations, KNNOperations
 
 
@@ -119,13 +118,13 @@ class TrainStrokeModel(KNNOperations):
         return self.__strokePredictedResult
 
 
-if __name__ == "__main__":
-    dataframe = CreateDataframe("stroke_data.csv").getDataframe()
+# if __name__ == "__main__":
+#     dataframe = CreateDataframe("stroke_data.csv").getDataframe()
 
-    patient_data_dataframe = CreateDataframe("PatientData.csv").getDataframe()
+#     patient_data_dataframe = CreateDataframe("PatientData.csv").getDataframe()
 
-    s = TrainStrokeModel(dataframe, patient_data_dataframe.copy(deep = True))
+#     s = TrainStrokeModel(dataframe, patient_data_dataframe.copy(deep = True))
 
-    df = s.resultToDict(patient_data_dataframe)
+#     df = s.resultToDict(patient_data_dataframe)
 
-    DiseaseFile().saveToFile("StrokeResults.csv", df)
+#     DiseaseFile().saveToFile("StrokeResults.csv", df)

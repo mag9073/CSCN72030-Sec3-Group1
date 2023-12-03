@@ -29,7 +29,7 @@ class ApexChart extends React.Component {
               },
               total: {
                 enabled: true,
-                offsetX: 0,
+                // offsetX: 0,
                 style: {
                   fontSize: '13px',
                   fontWeight: 900,
@@ -47,7 +47,7 @@ class ApexChart extends React.Component {
           text: 'Patient Blood Results',
         },
         xaxis: {
-          categories: ['Blood Glucose', 'SP02', 'Blood Pressure', 'Temperature', 'Cholesterol', 'Respiratory Rate'],
+          categories: ['Pregnancies', 'Blood Glucose', 'Blood Pressure', 'SkinThickness', 'Insulin', 'BMI', 'DiabetesPredigreeFunction', 'Age'],
           labels: {
             formatter: function (val) {
               return val;
@@ -62,7 +62,7 @@ class ApexChart extends React.Component {
         tooltip: {
           y: {
             formatter: function (val) {
-              return val + 'K';
+              return val;
             },
           },
         },
@@ -79,32 +79,39 @@ class ApexChart extends React.Component {
   }
   
 
-  componentDidMount() {
-    // Fetch CSV file and parse data
-    Papa.parse("/src/assets/files/PatientData.csv", {
-      download: true,
-      header: true,
-      dynamicTyping: true,
-      complete: (result) => {
-        console.log(result)
+componentDidMount() {
+  // Fetch CSV file and parse data
+  Papa.parse("/src/assets/files/DiabetesResults.csv", {
+    download: true,
+    header: true,
+    dynamicTyping: true,
+    complete: (result) => {
+      console.log(result);
 
-        const series = result.data.map((item) => ({
-          name: item.Age + '-' + item.Sex, // Using a combination of Age and Sex as the name
-          data: [
-            item.RestingBP,
-            item.Cholesterol,
-            item.FastingBS,
-            item.MaxHR,
-            item.Oldpeak,
-          ],
-        }));
+      const series = result.data
+      .filter(item => item.Pregnancies !== null)
+      .map(item => ({
+        name: 'Diabetes',
+        data: [
+          item.Pregnancies,
+          item.Glucose,
+          item.BloodPressure,
+          item.SkinThickness,
+          item.Insulin,
+          item.BMI,
+          item.DiabetesPedigreeFunction,
+          item.Age,
+        ]
+      }));
 
-        this.setState({
-          series: series,
-        });
-      },
-    });
-  }
+
+      this.setState({
+        series: series,
+      });
+    },
+  });
+}
+
 
   render() {
     return (

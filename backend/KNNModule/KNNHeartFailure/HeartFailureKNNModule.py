@@ -17,7 +17,6 @@ except ValueError:  # Already removed
     pass
 
 
-from KNNFiles.KNNFileOperations import DiseaseFile
 from KNNAbstract.abstract import DataFrameOperations, KNNOperations
 
 class CreateDataframe(DataFrameOperations):
@@ -120,7 +119,7 @@ class TrainHeartFailureModel(KNNOperations):
 
 class FeatureAppropriationConversion:
 
-    def convertFeaturesToNumeric(dataframe):
+    def convertFeaturesToNumeric(self, dataframe):
         cols = ["Sex", "ChestPainType", "RestingECG",
                 "ExerciseAngina", "ST_Slope"]
 
@@ -149,20 +148,20 @@ class FeatureAppropriationConversion:
         return dataframe
 
 
-if __name__ == "__main__":
-    dataframe = CreateDataframe("heartFailure.csv").getDataframe()
+# if __name__ == "__main__":
+#     dataframe = CreateDataframe("heartFailure.csv").getDataframe()
 
-    dataframe = FeatureAppropriationConversion.convertFeaturesToNumeric(
-        dataframe)
+#     dataframe = FeatureAppropriationConversion().convertFeaturesToNumeric(
+#         dataframe)
 
-    patient_dataframe = CreateDataframe("PatientData.csv").getDataframe()
+#     patient_dataframe = CreateDataframe("PatientData.csv").getDataframe()
 
-    patient_dataframe = FeatureAppropriationConversion.convertFeaturesToNumeric(
-        patient_dataframe)
+#     patient_dataframe = FeatureAppropriationConversion().convertFeaturesToNumeric(
+#         patient_dataframe)
 
 
-    hf = TrainHeartFailureModel(dataframe, patient_dataframe.copy(deep = True))
+#     hf = TrainHeartFailureModel(dataframe, patient_dataframe.copy(deep = True))
 
-    df = hf.resultToDict(patient_dataframe)
+#     df = hf.resultToDict(patient_dataframe)
 
-    DiseaseFile().saveToFile("HeartFailureResults.csv", df)
+#     DiseaseFile().saveToFile("HeartFailureResults.csv", df)

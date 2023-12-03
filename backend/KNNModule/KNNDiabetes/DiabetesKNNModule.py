@@ -21,12 +21,11 @@ except ValueError:  # Already removed
 
 
 from KNNAbstract.abstract import DataFrameOperations, KNNOperations
-from KNNFiles.KNNFileOperations import DiseaseFile
 
 
 class CreateDataframe(DataFrameOperations):
     def __init__(self):
-        self.__df = pd.read_csv("diabetes.csv")
+        self.__df = pd.read_csv("KNNModule/KNNDiabetes/diabetes.csv")
 
         self.filterNoise()
 
@@ -122,13 +121,13 @@ class TrainDiabeticModel(KNNOperations):
         return self.__diabeticsPredictedResult
 
 
-if (__name__) == "__main__":
-    dataframe = CreateDataframe().getDataframe()
+# if (__name__) == "__main__":
+    # dataframe = CreateDataframe().getDataframe()
 
-    patient_data_dataframe = DiseaseFile.readFromFile("PatientData.csv")
+    # patient_data_dataframe = DiseaseFile().readFromFile()
 
-    d = TrainDiabeticModel(dataframe, patient_data_dataframe.copy(deep=True))
+    # d = TrainDiabeticModel(dataframe, patient_data_dataframe.copy(deep=True))
 
-    df = d.resultToDict(patient_data_dataframe)
+    # df = d.resultToDict(patient_data_dataframe)
 
-    DiseaseFile().saveToFile("DiabetesResults.csv", df)
+    # DiseaseFile().saveToFile("DiabetesResults.csv", df)
