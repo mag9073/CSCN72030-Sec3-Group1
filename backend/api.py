@@ -9,7 +9,8 @@ import json
 rootpath = os.path.join(os.getcwd(), '..')
 sys.path.append(rootpath)
 
-from KNNModule.KNNDiabetes.DiabetesKNNModule import *
+from KNNModule.KNNDiabetes.DiabetesKNNModule import CreateDataframe as DCreateDataFrame, TrainDiabeticModel as DTrainDiabeticModel
+from KNNModule.KNNHeartFailure.HeartFailureKNNModule import CreateDataframe as HFCreateDataFrame, FeatureAppropriationConversion as HFFeatureAppropriationConversion, TrainHeartFailureModel as HFTrainHeartFailureModel
 from AuthenticationModule.AuthenticationModule import *
 from InputModule.Input_Module_Python import *
 from FileModule.AuthenticationFile.AuthenticationFile import *
@@ -78,27 +79,9 @@ def get_stroke_recommendation_files():
 
     return jsonify(stroke_resources)
 
-# @app.route('/diabetes-prediction', methods=['GET'])
-# def get_diabetes_prediction():
-#     dataframe = CreateDataframe().getDataframe()
-
-#     patient_data = ReadingPatientFile("KNNModule/KNNDiabetes/PatientData.csv").readFromFile()
-
-#     diabetes_result = TrainDiabeticModel(dataframe, patient_data).getPredictedResult()
-
-#     result_file_path = "KNNModule/KNNDiabetes/DiabetesResults.csv"
-#     # SavingPredictedResults(result_file_path, diabetes_result).saveToFile()
-
-#     patient_results = ReadingPatientFile(result_file_path).readFromFile()
-
-#     final_patient_results = patient_results.tolist()
-
-#     # return jsonify({"result_file_path": f'backend/api/{result_file_path}'})
-#     return jsonify({"patient results": f'{final_patient_results}'})
-
 @app.route('/diabetes-prediction', methods=['GET'])
 def get_diabetes_prediction():
-    dataframe = CreateDataframe().getDataframe()
+    dataframe = DCreateDataFrame().getDataframe()
 
     f = File("KNNModule/KNNDiabetes/PatientData.csv")
 
@@ -106,13 +89,38 @@ def get_diabetes_prediction():
 
     patient_data_dataframe = d.readFromFile()
 
-    db = TrainDiabeticModel(dataframe, patient_data_dataframe.copy(deep=True))
+    db = DTrainDiabeticModel(dataframe, patient_data_dataframe.copy(deep=True))
 
     df = db.resultToDict(patient_data_dataframe)
 
     d.saveToFile("C:/Users/Hangsihak Sin/OneDrive/Desktop/CSCN72030-Sec3-Group1/frontend/src/assets/files/DiabetesResults.csv", df)    
 
-    return jsonify({"message": "Prediction completed successfully"})
+    return jsonify({"message": "Diabetes Prediction completed successfully"})
+
+
+@app.route('/heartfailure-prediction', methods=['GET'])
+def get_heartfailure_prediction():
+    dataframe = HFCreateDataFrame("KNNModule/KNNHeartFailure/heartFailure.csv").getDataframe()
+
+    dataframe = HFFeatureAppropriationConversion().convertFeaturesToNumeric(dataframe)
+
+    patient_dataframe = HFCreateDataFrame("KNNModule/KNNHeartFailure/PatientData.csv").getDataframe()
+
+    patient_dataframe = HFFeatureAppropriationConversion().convertFeaturesToNumeric(patient_dataframe)
+
+    hf_model = HFTrainHeartFailureModel(dataframe, patient_dataframe.copy(deep=True))
+
+    predicted_results_df = hf_model.resultToDict(patient_dataframe)
+
+    result_file_path = "C:/Users/Hangsihak Sin/OneDrive/Desktop/CSCN72030-Sec3-Group1/frontend/src/assets/files/HeartFailureResults.csv"
+    DiseaseFile(result_file_path).saveToFile(result_file_path, predicted_results_df)
+
+    return jsonify({"message": "Heart Failure Prediction completed successfully"})
+
+@app.route('/stroke-prediction', methods=['GET'])
+def get_stroke_prediction():
+    pass
+
 
 @app.route('/authenticate', methods=['POST'])
 def get_authentication():

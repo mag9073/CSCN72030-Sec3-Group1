@@ -13,7 +13,12 @@ class ApexChart extends React.Component {
     super(props);
 
     this.state = {
-      series: [],
+      t1: [],
+      t2: [],
+      t3: [],
+      diabetesSeries: [],
+      heartFailureSeries: [],
+      strokeSeries: [],
       options: {
         chart: {
           type: 'bar',
@@ -79,41 +84,99 @@ class ApexChart extends React.Component {
   }
   
 
-componentDidMount() {
-  // Fetch CSV file and parse data
-  Papa.parse("/src/assets/files/DiabetesResults.csv", {
-    download: true,
-    header: true,
-    dynamicTyping: true,
-    complete: (result) => {
-      console.log(result);
-
-      const series = result.data
-      .filter(item => item.Pregnancies !== null)
-      .map(item => ({
-        name: 'Diabetes',
-        data: [
-          item.Pregnancies,
-          item.Glucose,
-          item.BloodPressure,
-          item.SkinThickness,
-          item.Insulin,
-          item.BMI,
-          item.DiabetesPedigreeFunction,
-          item.Age,
-        ]
-      }));
-
-
-      this.setState({
-        series: series,
-      });
-    },
-  });
-}
+  componentDidMount() {
+    // Fetch CSV file and parse data for DiabetesResults.csv
+    Papa.parse("/src/assets/files/DiabetesResults.csv", {
+      download: true,
+      header: true,
+      dynamicTyping: true,
+      complete: (diabetesResult) => {
+        console.log('Diabetes CSV Data:', diabetesResult);
+      
+        const diabetesSeries = diabetesResult.data
+          .filter(item => item.Pregnancies !== null)
+          .map(item => ({
+            name: 'Diabetes',
+            data: [
+              item.Pregnancies,
+              item.Glucose,
+              item.BloodPressure,
+              item.SkinThickness,
+              item.Insulin,
+              item.BMI,
+              item.DiabetesPedigreeFunction,
+              item.Age,
+            ]
+          }));
+      
+        this.setState({
+          diabetesSeries: diabetesSeries,
+        });
+      }
+    })      
+  
+    // Fetch CSV file and parse data for HeartFailureResults.csv
+    Papa.parse("/src/assets/files/HeartFailureResults.csv", {
+      download: true,
+      header: true,
+      dynamicTyping: true,
+      complete: (heartFailureResult) => {
+        console.log(heartFailureResult);
+  
+        const heartFailureSeries = heartFailureResult.data
+          .filter(item => item.Age !== null)  // Assuming Age is a necessary field for HeartFailureResults
+          .map(item => ({
+            name: 'Heart Failure',
+            data: [
+              item.Age,
+              item.Sex,  // Add other necessary fields for HeartFailureResults
+              item.ChestPainType,
+              item.RestingBP,
+              item.Cholesterol,
+              item.FastingBS,
+              item.RestingECG,
+              item.MaxHR,
+              item.ExerciseAngina,
+              item.Oldpeak,
+              item.ST_Slope,
+              item.HeartDisease,
+            ]
+          }));
+  
+        // Set state for HeartFailureResults
+        this.setState({
+          heartFailureSeries: heartFailureSeries,
+        });
+      },
+    });
+  }
+  
 
 
   render() {
+
+    const { currentSeries, isDarkMode } = this.props;
+    let seriesToDisplay;
+
+    let dynamicXAxisCategories;
+
+    if (currentSeries === 'diabetesSeries') {
+      seriesToDisplay = this.state.diabetesSeries;
+      dynamicXAxisCategories = [
+        'Pregnancies', 'Blood Glucose', 'Blood Pressure', 'SkinThickness', 'Insulin', 'BMI', 'DiabetesPredigreeFunction', 'Age'
+      ];
+    } else if (currentSeries === 'heartfailureSeries') {
+      seriesToDisplay = this.state.heartFailureSeries;
+      dynamicXAxisCategories = [
+        'Age', 'Sex', 'ChestPainType', 'RestingBP', 'Cholesterol', 'FastingBS', 'RestingECG', 'MaxHR', 'ExerciseAngina', 'Oldpeak', 'ST_Slope', 'HeartDisease'
+      ];
+    } else {
+      seriesToDisplay = this.state.strokeSeries;
+      dynamicXAxisCategories = null; // Set to null or undefined when not needed
+    }
+
+    console.log('Series to Display:', currentSeries);
+
     return (
       <DarkModeContext.Consumer>
         {(context) => {
@@ -165,6 +228,7 @@ componentDidMount() {
                   ...this.state.options,
                   xaxis: {
                     ...this.state.options.xaxis,
+                    categories: dynamicXAxisCategories,
                     labels: {
                       ...this.state.options.xaxis.labels,
                       style: xaxisLabelsStyle,
@@ -199,7 +263,7 @@ componentDidMount() {
                     },
                   },
                 }}
-                series={this.state.series}
+                series={seriesToDisplay}
                 type="bar"
                 height={300}
               />
@@ -218,8 +282,12 @@ export default class DataView extends Component {
     super();
     this.state = {
       navigateTo: null,
-      actualResults: '',
-      series: []
+      diabetesReturnMessage: '',
+      heartfailureReturnMessage: '',
+      strokeReturnMessage: '',
+      currentSeries: 'diabetesSeries',
+      diabetesSeries: [], // Add this line
+      heartFailureSeries: [], // Add this line
     };
   }
 
@@ -229,15 +297,65 @@ export default class DataView extends Component {
     fetch('http://localhost:5000/diabetes-prediction')
       .then((res) => res.json())
       .then((data) => {
-      this.setState({ actualResults: JSON.stringify(data) });
-      console.log(this.state.actualResults)
-      })}
+        this.setState({ diabetesReturnMessage: JSON.stringify(data) });
+        console.log(this.state.diabetesReturnMessage);
+      });
+  
+    fetch('http://localhost:5000/heartfailure-prediction')
+      .then((res) => res.json())
+      .then((data) => {
+        this.setState({ heartfailureReturnMessage: JSON.stringify(data) });
+        console.log(this.state.heartfailureReturnMessage);
+      });
+  
+    fetch('http://localhost:5000/stroke-prediction')
+      .then((res) => res.json())
+      .then((data) => {
+        this.setState({ strokeReturnMessage: JSON.stringify(data) });
+        console.log(this.state.strokeReturnMessage);
+      });
+
+      
+  }
+  
 
   handleNavigate = (path) => {
     this.setState({ navigateTo: path });
   };
 
+
+  handleNext = () => {
+    // Define the available series options
+    const seriesOptions = ['diabetesSeries', 'heartfailureSeries', 'strokeSeries'];
+
+    // Get the index of the current series
+    const currentIndex = seriesOptions.indexOf(this.state.currentSeries);
+
+    // Calculate the index of the next series
+    const nextIndex = (currentIndex + 1) % seriesOptions.length;
+
+    // Update the current series based on the next index
+    this.setState({ currentSeries: seriesOptions[nextIndex] });
+  };
+
+  handleSeriesChange = (selectedSeries) => {
+    this.setState({ currentSeries: selectedSeries });
+  };
+
   render() {
+    const { navigateTo, currentSeries, diabetesSeries, heartFailureSeries, strokeSeries } = this.state;
+
+    if (navigateTo) {
+      return <Navigate to={navigateTo} />;
+    }
+
+    const seriesToDisplay = currentSeries === 'diabetesSeries' ? this.state.diabetesSeries :
+                           currentSeries === 'heartFailureSeries' ? this.state.heartFailureSeries :
+                           this.state.strokeSeries;
+
+    
+    
+
     return (
       <DarkModeContext.Consumer>
         {(darkModeContext) => (
@@ -247,71 +365,63 @@ export default class DataView extends Component {
               const darkModeClass = isDarkMode ? 'dark' : 'light';
               const { fontSize } = fontSizeContext;
 
-    const { navigateTo } = this.state;
-
-    if (navigateTo) {
-      return <Navigate to={navigateTo} />;
-    }
-
-    return (
-      <div className={darkModeClass}>
-        <Layout>
-          <main className={`flex items-center flex-col gap-4 md:h-4/6 ${darkModeClass}`} style={{ fontSize: `${fontSize}px` }}>
-            <div className='flex gap-20 md:w-10/12 justify-between items-center flex-col md:flex-row'>
-              <div className='flex flex-col gap-10'>
-                <Button
-                  variant="outlined"
-                  startIcon={<ArrowBackIosIcon />}
-                  onClick={() => this.handleNavigate('/profile')}
-                >
-                  Patient Search
-                </Button>
-              </div>
-            </div>
-            <div className=' md:w-9/12'>
-              <ApexChart />
-              {/* Diabetes Prediction Results */}
-
-              <div className='flex flex-col gap-8'>
-                <div>
-                  <p>Diabetes Prediction Results: {(this.state.actualResults)}</p>
-                  <Button variant="contained" color="primary"
-                  onClick={() => this.handleNavigate('/profile/dataview/diabetes-recommendations')}
-                  style={{backgroundColor: '#156548'}}>
-                    View Recommendations
-                  </Button>
+              return (
+                <div className={darkModeClass}>
+                  <Layout>
+                    <main className={`flex items-center flex-col gap-4 md:h-4/6 ${darkModeClass}`} style={{ fontSize: `${fontSize}px` }}>
+                      <div className='flex gap-20 md:w-10/12 justify-between items-center flex-col md:flex-row'>
+                        <div className='flex flex-col gap-10'>
+                          <Button
+                            variant="outlined"
+                            startIcon={<ArrowBackIosIcon />}
+                            onClick={() => this.handleNavigate('/profile')}
+                          >
+                            Patient Search
+                          </Button>
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={this.handleNext}
+                            style={{ backgroundColor: '#156548' }}
+                          >
+                            Next
+                          </Button>
+                        </div>
+                      </div>
+                      <div className=' md:w-9/12'>
+                        <ApexChart currentSeries={currentSeries} isDarkMode={isDarkMode} />
+                        {/* Diabetes Prediction Results */}
+                        <div className='flex flex-col gap-8'>
+                          <div>
+                            <p>{`${currentSeries === 'diabetesSeries' ? 'Diabetes' : 'Heart Failure'} Prediction Results:`}</p>
+                            <Button
+                              variant="contained"
+                              color="primary"
+                              onClick={() => this.handleNavigate(`/profile/dataview/${currentSeries === 'diabetesSeries' ? 'diabetes' : 'heartfailure'}-recommendations`)}
+                              style={{ backgroundColor: '#156548' }}
+                            >
+                              View Recommendations
+                            </Button>
+                          </div>
+                          {/* Stroke Prediction Results */}
+                          <div>
+                            <p>Stroke Prediction Results: {(this.state.actualResults)}</p>
+                            <Button variant="contained" color="primary"
+                              onClick={() => this.handleNavigate('/profile/dataview/stroke-recommendations')}
+                              style={{ backgroundColor: '#156548' }}>
+                              View Recommendations
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    </main>
+                  </Layout>
                 </div>
-
-                {/* Heart Failure Prediction Results */}
-                <div>
-                  <p>Heart Failure Prediction Results: {(this.state.actualResults)}</p>
-                  <Button variant="contained" color="primary"
-                  onClick={() => this.handleNavigate('/profile/dataview/heartfailure-recommendations')}
-                  style={{backgroundColor: '#156548'}}>
-                    View Recommendations
-                  </Button>
-                </div>
-
-                {/* Stroke Prediction Results */}
-                <div>
-                  <p>Stroke Prediction Results: {(this.state.actualResults)}</p>
-                  <Button variant="contained" color="primary"
-                  onClick={() => this.handleNavigate('/profile/dataview/stroke-recommendations')}
-                  style={{backgroundColor: '#156548'}}>
-                    View Recommendations
-                  </Button>
-                </div>
-
-              </div>
-            </div>
-          </main>
-        </Layout>
-      </div>
+              );
+            }}
+          </FontSizeContext.Consumer>
+        )}
+      </DarkModeContext.Consumer>
     );
-  }}
-</FontSizeContext.Consumer>
-)}
-</DarkModeContext.Consumer>
-);
-}
+  }
 }
