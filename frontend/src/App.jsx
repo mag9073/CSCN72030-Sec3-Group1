@@ -30,6 +30,10 @@ class App extends React.Component {
     const { isDarkMode, selectedPatient } = this.state;
     const darkModeClass = isDarkMode ? 'dark' : 'light';
 
+    const diabetesRecommendations = "diabetes";
+    const heartFailureRecommendations = "heart failure";
+    const strokeRecommendations = "stroke";
+
     return (
       <FontSizeProvider>
         <DarkModeProvider>
@@ -55,7 +59,9 @@ class App extends React.Component {
                   />
                   <Route path="/profile/dataview" element={<DataViewScreen />} />
                   <Route path='profile/trendsview' element={<TrendsViewScreen />} />
-                  <Route path='/profile/dataview/recommendation' element={<RecommendationsScreen />} />
+                  <Route path='/profile/dataview/diabetes-recommendations' element={<RecommendationsScreen recommendations={diabetesRecommendations} />} />
+                  <Route path='/profile/dataview/heartfailure-recommendations' element={<RecommendationsScreen recommendations={heartFailureRecommendations} />} />
+                  <Route path='/profile/dataview/stroke-recommendations' element={<RecommendationsScreen recommendations={strokeRecommendations} />} />
                   <Route path='*' element={<ErrorScreen />} />
                 </Routes>
               </Router>

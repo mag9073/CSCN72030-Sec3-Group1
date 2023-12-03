@@ -268,7 +268,9 @@ export default class DataView extends Component {
               <div className='flex flex-col gap-8'>
                 <div>
                   <p>Diabetes Prediction Results: {(this.state.actualResults)}</p>
-                  <Button variant="contained" color="primary">
+                  <Button variant="contained" color="primary"
+                  onClick={() => this.handleNavigate('/profile/dataview/diabetes-recommendations')}
+                  style={{backgroundColor: '#156548'}}>
                     View Recommendations
                   </Button>
                 </div>
@@ -276,7 +278,9 @@ export default class DataView extends Component {
                 {/* Heart Failure Prediction Results */}
                 <div>
                   <p>Heart Failure Prediction Results: {(this.state.actualResults)}</p>
-                  <Button variant="contained" color="primary">
+                  <Button variant="contained" color="primary"
+                  onClick={() => this.handleNavigate('/profile/dataview/heartfailure-recommendations')}
+                  style={{backgroundColor: '#156548'}}>
                     View Recommendations
                   </Button>
                 </div>
@@ -284,7 +288,9 @@ export default class DataView extends Component {
                 {/* Stroke Prediction Results */}
                 <div>
                   <p>Stroke Prediction Results: {(this.state.actualResults)}</p>
-                  <Button variant="contained" color="primary">
+                  <Button variant="contained" color="primary"
+                  onClick={() => this.handleNavigate('/profile/dataview/stroke-recommendations')}
+                  style={{backgroundColor: '#156548'}}>
                     View Recommendations
                   </Button>
                 </div>

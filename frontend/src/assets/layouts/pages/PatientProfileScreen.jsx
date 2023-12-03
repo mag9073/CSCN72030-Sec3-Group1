@@ -100,16 +100,19 @@ class PatientProfileScreen extends React.Component {
 
                             <div className='flex flex-col gap-10 pt-10'>
                               <Button
-                                variant="outlined"
+                                variant="contained"
                                 onClick={() => this.handleNavigate(this.constructLink(`/dataview`))}
                                 className='w-80 h-20'
+                                style={{backgroundColor: '#156548'}}
+                              
                               >
                                 View Lab Results & Risk Percentage
                               </Button>
                               <Button
-                                variant='outlined'
+                                variant="contained"
                                 onClick={() => this.handleNavigate(this.constructLink(`/trendsview`))}
                                 className='w-80 h-20'
+                                style={{backgroundColor: '#156548'}}
                               >
                                 View Trend
                               </Button>
