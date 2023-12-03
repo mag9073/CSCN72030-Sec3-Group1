@@ -15,6 +15,7 @@ from InputModule.Input_Module_Python import *
 from FileModule.AuthenticationFile.AuthenticationFile import *
 from FileModule.PatientFile.PatientFile import *
 from FileModule.Trends.Trends import *
+from FileModule.HelpAndRecommendation.HelpAndRecommendation import *
 
 app = Flask(__name__)
 
@@ -42,6 +43,39 @@ def get_trendsview_files():
     t3 = Trends("Stroke").readSampleAndGenerateFile()
 
     return jsonify({'t1': t1, 't2': t2, 't3': t3})
+
+@app.route('/diabetes-recommendations', methods=['GET'])
+def get_diabetes_recommendation_files():
+
+    diabetes_path = File("FileModule/HelpAndRecommendation/DiabetesRecs.csv")
+
+    d = HelpAndRecommendationFile(diabetes_path)
+
+    diabetes_resources = d.readFileLineByLine()   
+
+    return jsonify(diabetes_resources)
+
+@app.route('/heartfailure-recommendations', methods=['GET'])
+def get_heartfailure_recommendation_files():
+
+    heartfailure_path = File("FileModule/HelpAndRecommendation/HeartDiseaseRecs.csv")
+
+    h = HelpAndRecommendationFile(heartfailure_path)
+    
+    heartfailure_resources = h.readFileLineByLine()
+
+    return jsonify(heartfailure_resources)
+
+@app.route('/stroke-recommendations', methods=['GET'])
+def get_stroke_recommendation_files():
+
+    stroke_path = File("FileModule/HelpAndRecommendation/StrokeRecs.csv")
+
+    s = HelpAndRecommendationFile(stroke_path)
+
+    stroke_resources = s.readFileLineByLine()
+
+    return jsonify(stroke_resources)
 
 @app.route('/diabetes-prediction', methods=['GET'])
 def get_diabetes_prediction():
