@@ -11,6 +11,7 @@ sys.path.append(rootpath)
 
 from KNNModule.KNNDiabetes.DiabetesKNNModule import CreateDataframe as DCreateDataFrame, TrainDiabeticModel as DTrainDiabeticModel
 from KNNModule.KNNHeartFailure.HeartFailureKNNModule import CreateDataframe as HFCreateDataFrame, FeatureAppropriationConversion as HFFeatureAppropriationConversion, TrainHeartFailureModel as HFTrainHeartFailureModel
+from KNNModule.KNNStroke.StrokeKNNModule import CreateDataframe as SCreateDataFrame, TrainStrokeModel as STrainStrokeModel
 from AuthenticationModule.AuthenticationModule import *
 from InputModule.Input_Module_Python import *
 from FileModule.AuthenticationFile.AuthenticationFile import *
@@ -119,8 +120,19 @@ def get_heartfailure_prediction():
 
 @app.route('/stroke-prediction', methods=['GET'])
 def get_stroke_prediction():
-    pass
+    dataframe = SCreateDataFrame("KNNModule/KNNStroke/stroke_data.csv").getDataframe()
 
+    patient_dataframe = SCreateDataFrame("KNNModule/KNNStroke/PatientData.csv").getDataframe()
+
+    s = STrainStrokeModel(dataframe, patient_dataframe.copy(deep=True))
+
+    df = s.resultToDict(patient_dataframe)
+
+    result_file_path = "C:/Users/Hangsihak Sin/OneDrive/Desktop/CSCN72030-Sec3-Group1/frontend/src/assets/files/StrokeResults.csv"
+
+    DiseaseFile(result_file_path).saveToFile(result_file_path, df)
+
+    return jsonify({"message": "Stroke Prediction completed successfully"})
 
 @app.route('/authenticate', methods=['POST'])
 def get_authentication():

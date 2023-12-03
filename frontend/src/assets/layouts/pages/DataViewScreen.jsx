@@ -106,12 +106,15 @@ class ApexChart extends React.Component {
               item.BMI,
               item.DiabetesPedigreeFunction,
               item.Age,
+              item.Outcome,
             ]
           }));
       
         this.setState({
           diabetesSeries: diabetesSeries,
         });
+
+        this.handleOutcomeChange(diabetesSeries.length > 0 ? diabetesSeries[0].data[8] : null, 'diabetesSeries', 'diabetes');
       }
     })      
   
@@ -142,16 +145,59 @@ class ApexChart extends React.Component {
               item.HeartDisease,
             ]
           }));
-  
+        
         // Set state for HeartFailureResults
         this.setState({
           heartFailureSeries: heartFailureSeries,
         });
+
+        this.handleOutcomeChange(heartFailureSeries.length > 0 ? heartFailureSeries[0].data[11] : null, 'heartfailureSeries', 'HeartDisease');
       },
-    });
-  }
+    })
+    
+  // Fetch CSV file and parse data for StrokeResults.csv
+  Papa.parse("/src/assets/files/StrokeResults.csv", {
+    download: true,
+    header: true,
+    dynamicTyping: true,
+    complete: (strokeResult) => {
+      console.log(strokeResult);
+
+      const strokeSeries = strokeResult.data
+        .map(item => ({
+          name: 'Stroke',
+          data: [
+            item.sex || 0,
+            item.age || 0,
+            item.hypertension || 0,
+            item.heart_disease || 0,
+            item.ever_married || 0,
+            item.work_type || 0,
+            item.Residence_type || 0,
+            item.avg_glucose_level || 0,
+            item.bmi || 0,
+            item.smoking_status || 0,
+            item.stroke || 0
+          ]
+        }));
+
+      // Set state for StrokeResults
+      this.setState({
+        strokeSeries: strokeSeries,
+      });
+
+      this.handleOutcomeChange(strokeSeries.length > 0 ? strokeSeries[0].data[10] : null, 'strokeSeries', 'stroke');
+      },
+    }
+
+      );
+    }
   
 
+    handleOutcomeChange = (outcome, seriesType) => {
+
+      this.props.onOutcomeChange(outcome, seriesType);
+    };
 
   render() {
 
@@ -159,20 +205,25 @@ class ApexChart extends React.Component {
     let seriesToDisplay;
 
     let dynamicXAxisCategories;
+    let titleName;
 
     if (currentSeries === 'diabetesSeries') {
       seriesToDisplay = this.state.diabetesSeries;
       dynamicXAxisCategories = [
         'Pregnancies', 'Blood Glucose', 'Blood Pressure', 'SkinThickness', 'Insulin', 'BMI', 'DiabetesPredigreeFunction', 'Age'
       ];
+      titleName === 'Patient Blood Results - Diabetes'
     } else if (currentSeries === 'heartfailureSeries') {
       seriesToDisplay = this.state.heartFailureSeries;
       dynamicXAxisCategories = [
         'Age', 'Sex', 'ChestPainType', 'RestingBP', 'Cholesterol', 'FastingBS', 'RestingECG', 'MaxHR', 'ExerciseAngina', 'Oldpeak', 'ST_Slope', 'HeartDisease'
       ];
-    } else {
+
+      titleName === 'Patient Blood Results - Heart Failure'
+    } else if (currentSeries === 'strokeSeries') {
       seriesToDisplay = this.state.strokeSeries;
-      dynamicXAxisCategories = null; // Set to null or undefined when not needed
+      dynamicXAxisCategories = ['sex', 'age', 'hypertension', 'heart_disease', 'ever_married', 'work_type', 'residence_type', 'avg_glucose_level', 'bmi', 'smoking_status', 'stroke'];
+      titleName === 'Patient Blood Results - Stroke'
     }
 
     console.log('Series to Display:', currentSeries);
@@ -193,6 +244,11 @@ class ApexChart extends React.Component {
 
           const chartTitleStyle = {
             color: isDarkMode ? '#FFF' : '#000',
+          };
+
+          const chartTitle = {
+            text: titleName,
+            style: chartTitleStyle,
           };
 
           const titleTextStyle = {
@@ -237,6 +293,7 @@ class ApexChart extends React.Component {
                   title: {
                     ...this.state.options.title,
                     style: chartTitleStyle,
+                    
                   },
                   tooltip: {
                     ...this.state.options.tooltip,
@@ -276,6 +333,7 @@ class ApexChart extends React.Component {
 }
 
 
+
 export default class DataView extends Component {
 
   constructor() {
@@ -286,8 +344,11 @@ export default class DataView extends Component {
       heartfailureReturnMessage: '',
       strokeReturnMessage: '',
       currentSeries: 'diabetesSeries',
-      diabetesSeries: [], // Add this line
-      heartFailureSeries: [], // Add this line
+      diabetesSeries: [], 
+      heartFailureSeries: [], 
+      diabetesRisk: null,
+      heartDiseaseRisk: null,
+      strokeRisk: null,
     };
   }
 
@@ -342,19 +403,69 @@ export default class DataView extends Component {
     this.setState({ currentSeries: selectedSeries });
   };
 
+
+
+  renderSeriesButtons = () => {
+    const seriesOptions = ['diabetesSeries', 'heartfailureSeries', 'strokeSeries'];
+  
+    return seriesOptions.map((series, index) => {
+      const isDiabetesSeries = series === 'diabetesSeries';
+      const isHeartFailureSeries = series === 'heartfailureSeries';
+      const isStrokeSeries = series === 'strokeSeries';
+  
+      let outcome;
+      let buttonColor;
+      let seriesName;
+  
+      if (isDiabetesSeries) {
+        outcome = this.state.diabetesRisk;
+        seriesName = 'Diabetes Series';
+      } else if (isHeartFailureSeries) {
+        outcome = this.state.heartDiseaseRisk;
+        seriesName = 'Heart Failure Series';
+      } else if (isStrokeSeries) {
+        outcome = this.state.strokeRisk;
+        seriesName = 'Stroke Series';
+      }
+  
+      buttonColor = outcome === 1 ? 'red' : 'green';
+  
+      return (
+        <div key={index} className='w-full flex flex-col items-center'>
+          <button
+            className={`series-button ${series === this.state.currentSeries ? 'active' : ''} bg-gray-800 border-8 border-black shadow-md transition duration-300 focus:outline-none focus:border-blue-500 hover:bg-gray-900`}
+            style={{ backgroundColor: buttonColor }}
+            onClick={() => this.handleSeriesChange(series)}
+          >
+            {outcome === 1 ? 'At Risk' : outcome === 0 ? 'Not At Risk' : ''}
+          </button>
+          <span>{seriesName}</span>
+        </div>
+      );
+    });
+  };
+  
+  
+
+  handleOutcomeChange = (outcome, seriesType) => {
+    console.log(`Outcome from ApexChart (${seriesType}): `, outcome);
+
+    if (seriesType === 'diabetesSeries') {
+      this.setState({diabetesRisk: outcome})
+    } else if (seriesType === 'heartfailureSeries') {
+      this.setState({heartDiseaseRisk: outcome})
+    } else if (seriesType === 'strokeSeries') {
+      this.setState({strokeRisk: outcome})
+    }
+
+  };
+
   render() {
     const { navigateTo, currentSeries, diabetesSeries, heartFailureSeries, strokeSeries } = this.state;
 
     if (navigateTo) {
       return <Navigate to={navigateTo} />;
     }
-
-    const seriesToDisplay = currentSeries === 'diabetesSeries' ? this.state.diabetesSeries :
-                           currentSeries === 'heartFailureSeries' ? this.state.heartFailureSeries :
-                           this.state.strokeSeries;
-
-    
-    
 
     return (
       <DarkModeContext.Consumer>
@@ -378,22 +489,29 @@ export default class DataView extends Component {
                           >
                             Patient Search
                           </Button>
-                          <Button
+                          {/* <Button
                             variant="contained"
                             color="primary"
                             onClick={this.handleNext}
                             style={{ backgroundColor: '#156548' }}
                           >
                             Next
-                          </Button>
+                          </Button> */}
                         </div>
                       </div>
                       <div className=' md:w-9/12'>
-                        <ApexChart currentSeries={currentSeries} isDarkMode={isDarkMode} />
+                        <ApexChart currentSeries={currentSeries} isDarkMode={isDarkMode} onOutcomeChange={(outcome, seriesType, outcomeField) => this.handleOutcomeChange(outcome, seriesType, outcomeField)}/>
                         {/* Diabetes Prediction Results */}
-                        <div className='flex flex-col gap-8'>
+
+
+
+                        {/* Render series selection buttons */}
+                        <div className='series-buttons flex'>
+                          {this.renderSeriesButtons()}
+                        </div>
+                        <div className='flex flex-row gap-8 justify-center items-center'>
                           <div>
-                            <p>{`${currentSeries === 'diabetesSeries' ? 'Diabetes' : 'Heart Failure'} Prediction Results:`}</p>
+                            {/* <p>{`${currentSeries === 'diabetesSeries' ? 'Diabetes' : 'Heart Failure'} Prediction Resources:`}</p> */}
                             <Button
                               variant="contained"
                               color="primary"
@@ -403,9 +521,19 @@ export default class DataView extends Component {
                               View Recommendations
                             </Button>
                           </div>
+
+                          <div>
+                            {/* <p>Stroke Prediction Resources: {(this.state.actualResults)}</p> */}
+                            <Button variant="contained" color="primary"
+                              onClick={() => this.handleNavigate('/profile/dataview/heartfailure-recommendations')}
+                              style={{ backgroundColor: '#156548' }}>
+                              View Recommendations
+                            </Button>
+                          </div>
+
                           {/* Stroke Prediction Results */}
                           <div>
-                            <p>Stroke Prediction Results: {(this.state.actualResults)}</p>
+                            {/* <p>Stroke Prediction Resources: {(this.state.actualResults)}</p> */}
                             <Button variant="contained" color="primary"
                               onClick={() => this.handleNavigate('/profile/dataview/stroke-recommendations')}
                               style={{ backgroundColor: '#156548' }}>
