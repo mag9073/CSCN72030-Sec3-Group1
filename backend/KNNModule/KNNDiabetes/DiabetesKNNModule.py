@@ -3,6 +3,7 @@ import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import classification_report
+import random
 
 import random
 
@@ -20,13 +21,12 @@ except ValueError:  # Already removed
 
 
 from KNNAbstract.abstract import DataFrameOperations, KNNOperations
-from KNNFiles.KNNFileOperations import ReadingPatientFile
-from KNNFiles.KNNFileOperations import SavingPredictedResults
+from KNNFiles.KNNFileOperations import DiseaseFile
 
 
 class CreateDataframe(DataFrameOperations):
     def __init__(self):
-        self.__df = pd.read_csv("KNNModule/KNNDiabetes/diabetes.csv")
+        self.__df = pd.read_csv("diabetes.csv")
 
         self.filterNoise()
 
@@ -40,11 +40,16 @@ class CreateDataframe(DataFrameOperations):
 
 
 class TrainDiabeticModel(KNNOperations):
-    def __init__(self, dataframe, patient_data):
+    def __init__(self, dataframe, patient_data_dataframe):
         self.__df = dataframe
         self.__diabeticsPredictedResult = []
+        self.__patient_data_dataframe = patient_data_dataframe
 
         self.splitDataset()
+
+        self.adjustData()
+
+        patient_data = (self.__patient_data_dataframe)[(self.__patient_data_dataframe).columns[ : ]].values
 
         self.trainDiabeticKNNModel(patient_data)
 
@@ -65,6 +70,27 @@ class TrainDiabeticModel(KNNOperations):
 
         return x, y
 
+    def adjustData(self):
+        random.seed(101)
+
+        list_data = (self.__df)[(self.__df).columns[ : ]].values
+
+        headers = ["Pregnancies", "Glucose", "BloodPressure",
+                   "SkinThickness", "Insulin", "BMI", "DiabetesPedigreeFunction", "Age"]
+
+        for count in range(0, 6):
+            dict_data = {}
+
+            rand_num =  random.randint(5, 350)
+
+            req_list = list_data[rand_num]
+
+            for list_index in range(0, len(headers)):
+                dict_data[headers[list_index]] = req_list[list_index]
+
+            (self.__patient_data_dataframe).loc[len(self.__patient_data_dataframe)] = dict_data
+
+
     def trainDiabeticKNNModel(self, patient_data):
         x_train, y_train = self.scaleDataset(self.__train)
 
@@ -76,6 +102,22 @@ class TrainDiabeticModel(KNNOperations):
 
         self.__diabeticsPredictedResult = knn_model.predict(patient_data)
 
+        self.__diabeticsPredictedResult = [self.__diabeticsPredictedResult[0]]
+
+    def resultToDict(self, patient_data_dataframe):
+        dict_patient_sample = {}
+
+        patient_dict = patient_data_dataframe.to_dict()
+
+        dict_patient_sample[0] = self.__diabeticsPredictedResult[0]
+
+        patient_dict["Outcome"] = dict_patient_sample
+
+        df = pd.DataFrame.from_dict(patient_dict)
+
+        return df
+
+
     def getPredictedResult(self):
         return self.__diabeticsPredictedResult
 
@@ -83,9 +125,10 @@ class TrainDiabeticModel(KNNOperations):
 if (__name__) == "__main__":
     dataframe = CreateDataframe().getDataframe()
 
-    patient_data = ReadingPatientFile("PatientData.csv").readFromFile()
+    patient_data_dataframe = DiseaseFile.readFromFile("PatientData.csv")
 
-    diabetes_result = TrainDiabeticModel(
-        dataframe, patient_data).getPredictedResult()
+    d = TrainDiabeticModel(dataframe, patient_data_dataframe.copy(deep=True))
 
-    SavingPredictedResults("DiabetesResults.csv", diabetes_result).saveToFile()
+    df = d.resultToDict(patient_data_dataframe)
+
+    DiseaseFile().saveToFile("DiabetesResults.csv", df)

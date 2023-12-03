@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from sklearn.neighbors import KNeighborsClassifier
+import random
 
 import sys
 from pathlib import Path
@@ -16,9 +17,8 @@ except ValueError:  # Already removed
     pass
 
 
+from KNNFiles.KNNFileOperations import DiseaseFile
 from KNNAbstract.abstract import DataFrameOperations, KNNOperations
-from KNNFiles.KNNFileOperations import SavingPredictedResults
-
 
 class CreateDataframe(DataFrameOperations):
     def __init__(self, fileName):
@@ -35,11 +35,16 @@ class CreateDataframe(DataFrameOperations):
 
 
 class TrainHeartFailureModel(KNNOperations):
-    def __init__(self, dataframe, patient_data):
+    def __init__(self, dataframe, patient_dataframe):
         self.__df = dataframe
         self.__heartFailurePredictedResult = []
+        self.__patient_data_dataframe = patient_dataframe
 
         self.splitDataset()
+
+        self.adjustData()
+
+        patient_data = (self.__patient_data_dataframe)[(self.__patient_data_dataframe).columns[ : ]].values
 
         self.trainHeartFailureKNNModel(patient_data)
 
@@ -57,9 +62,29 @@ class TrainHeartFailureModel(KNNOperations):
         scaler = StandardScaler()
         x = scaler.fit_transform(x)
 
-        #data = np.hstack((x, np.reshape(y, (-1, 1))))
+        # data = np.hstack((x, np.reshape(y, (-1, 1))))
 
         return x, y
+
+    def adjustData(self):
+        random.seed(101)
+
+        list_data = (self.__df)[(self.__df).columns[ : ]].values
+
+        headers = ["Age", "Sex","ChestPainType","RestingBP","Cholesterol","FastingBS","RestingECG","MaxHR","ExerciseAngina","Oldpeak","ST_Slope"]
+
+        for count in range(0, 6):
+            dict_data = {}
+
+            rand_num =  random.randint(20, 650)
+
+            req_list = list_data[rand_num]
+
+            for list_index in range(0, len(headers)):
+                dict_data[headers[list_index]] = req_list[list_index]
+
+            (self.__patient_data_dataframe).loc[len(self.__patient_data_dataframe)] = dict_data
+
 
     def trainHeartFailureKNNModel(self, patient_data):
         x_train, y_train = self.scaleDataset(self.__train)
@@ -71,6 +96,22 @@ class TrainHeartFailureModel(KNNOperations):
         patient_data = scaler.fit_transform(patient_data)
 
         self.__heartFailurePredictedResult = knn_model.predict(patient_data)
+
+        self.__heartFailurePredictedResult = [self.__heartFailurePredictedResult[0]]
+
+
+    def resultToDict(self, patient_data_dataframe):
+        dict_patient_sample = {}
+
+        patient_dict = patient_data_dataframe.to_dict()
+
+        dict_patient_sample[0] = self.__heartFailurePredictedResult[0]
+
+        patient_dict["HeartDisease"] = dict_patient_sample
+
+        df = pd.DataFrame.from_dict(patient_dict)
+
+        return df
 
 
     def getPredictedResult(self):
@@ -88,12 +129,12 @@ class FeatureAppropriationConversion:
                 dataframe[column] = (dataframe[column] == "F").astype(int)
 
             elif (column == "ChestPainType"):
-                custom_mapping = {"ATA": -1, "NAP": 0, "ASY": 1, "TA": 2}
+                custom_mapping = {"ATA": 1, "NAP": 2, "ASY": 3, "TA": 4}
 
                 dataframe[column] = dataframe[column].map(custom_mapping)
 
             elif (column == "RestingECG"):
-                custom_mapping = {"Normal": -1, "ST": 0, "LVH": 1}
+                custom_mapping = {"Normal": 1, "ST": 2, "LVH": 3}
 
                 dataframe[column] = dataframe[column].map(custom_mapping)
 
@@ -101,7 +142,7 @@ class FeatureAppropriationConversion:
                 dataframe[column] = (dataframe[column] == "Y").astype(int)
 
             else:
-                custom_mapping = {"Up": -1, "Flat": 0, "Down": 1}
+                custom_mapping = {"Up": 1, "Flat": 2, "Down": 3}
 
                 dataframe[column] = dataframe[column].map(custom_mapping)
 
@@ -110,25 +151,18 @@ class FeatureAppropriationConversion:
 
 if __name__ == "__main__":
     dataframe = CreateDataframe("heartFailure.csv").getDataframe()
-    
 
     dataframe = FeatureAppropriationConversion.convertFeaturesToNumeric(
         dataframe)
-    
 
     patient_dataframe = CreateDataframe("PatientData.csv").getDataframe()
 
-
     patient_dataframe = FeatureAppropriationConversion.convertFeaturesToNumeric(
         patient_dataframe)
-    
-
-    patient_dataframe = patient_dataframe[patient_dataframe.columns[:]].values
 
 
-    heartFailure_result = TrainHeartFailureModel(
-        dataframe, patient_dataframe).getPredictedResult()
-    
+    hf = TrainHeartFailureModel(dataframe, patient_dataframe.copy(deep = True))
 
-    SavingPredictedResults("HeartFailureResults.csv",
-                           heartFailure_result).saveToFile()
+    df = hf.resultToDict(patient_dataframe)
+
+    DiseaseFile().saveToFile("HeartFailureResults.csv", df)
