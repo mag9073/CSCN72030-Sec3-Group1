@@ -20,20 +20,16 @@ class DiseaseFile(File):
     def __init__(self, fileInstance):
         self.__fileInstance = fileInstance
 
-    def saveToFile(self, fileName, predictedResult):
-        with open(fileName, "w") as my_file:
-            for element in predictedResult:
-                my_file.write(f"{element}")
+    def saveToFile(self, fileName, dataframe):
+        dataframe.to_csv(fileName, index = False)
 
     def readFromFile(self):
         fileName = (self.__fileInstance).getFilename()
 
         dataframe = pd.read_csv(fileName)
 
-        return dataframe[dataframe.columns[:]].values
+        return dataframe
 
-    def returnDataframeValues(dataframe):
-        return dataframe[dataframe.columns[:]].values
 
 
 if __name__ == "__main__":
@@ -42,5 +38,3 @@ if __name__ == "__main__":
     d = DiseaseFile(f)
 
     print(d.readFromFile())
-
-    d.saveToFile("test.csv", [1])
