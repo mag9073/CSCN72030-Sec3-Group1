@@ -3,6 +3,7 @@ import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import classification_report
+import random
 
 import sys
 from pathlib import Path
@@ -16,8 +17,8 @@ try:
 except ValueError:  # Already removed
     pass
 
+from KNNFiles.KNNFileOperations import DiseaseFile
 from KNNAbstract.abstract import DataFrameOperations, KNNOperations
-from KNNFiles.KNNFileOperations import SavingPredictedResults
 
 
 class CreateDataframe(DataFrameOperations):
@@ -28,19 +29,24 @@ class CreateDataframe(DataFrameOperations):
 
     def getDataframe(self):
         return self.__df
-    
+
     def filterNoise(self):
-        self.__df = self.__df[(self.__df.sex >= 0) & (self.__df.age >= 0) 
-        & (self.__df.hypertension >= 0) & (self.__df.heart_disease >= 0) & (self.__df.ever_married >= 0) 
-        & (self.__df.work_type >= 0) & (self.__df.Residence_type >= 0) & (self.__df.avg_glucose_level >= 0) & (self.__df.bmi >= 0)]
+        self.__df = self.__df[(self.__df.sex >= 0) & (self.__df.age >= 0)
+                              & (self.__df.hypertension >= 0) & (self.__df.heart_disease >= 0) & (self.__df.ever_married >= 0)
+                              & (self.__df.work_type >= 0) & (self.__df.Residence_type >= 0) & (self.__df.avg_glucose_level >= 0) & (self.__df.bmi >= 0)]
 
 
 class TrainStrokeModel(KNNOperations):
-    def __init__(self, dataframe, patient_data):
+    def __init__(self, dataframe, patient_dataframe):
         self.__df = dataframe
         self.__strokePredictedResult = []
+        self.__patient_data_dataframe = patient_dataframe
 
         self.splitDataset()
+
+        self.adjustData()
+
+        patient_data = (self.__patient_data_dataframe)[self.__patient_data_dataframe.columns[ : ]].values
 
         self.trainStrokeKNNModel(patient_data)
 
@@ -58,36 +64,68 @@ class TrainStrokeModel(KNNOperations):
         scaler = StandardScaler()
         x = scaler.fit_transform(x)
 
-        # data = np.hstack((x, np.reshape(y, (-1, 1))))
+        return scaler, x, y
 
-        return x, y
+    def adjustData(self):
+        random.seed(101)
+
+        list_data = (self.__df)[(self.__df).columns[:]].values
+
+        headers = ["sex", "age", "hypertension", "heart_disease", "ever_married",
+                   "work_type", "Residence_type", "avg_glucose_level", "bmi", "smoking_status"]
+
+        for count in range(0, 10):
+            dict_data = {}
+
+            rand_num = random.randint(20300, 20600)
+
+            req_list = list_data[rand_num]
+
+            for list_index in range(0, len(headers)):
+                dict_data[headers[list_index]] = req_list[list_index]
+
+            (self.__patient_data_dataframe).loc[len(
+                self.__patient_data_dataframe)] = dict_data
+
 
     def trainStrokeKNNModel(self, patient_data):
-        x_train, y_train = self.scaleDataset(self.__train)
+        scaler, x_train, y_train = self.scaleDataset(self.__train)
 
         knn_model = KNeighborsClassifier(n_neighbors=3)
         knn_model.fit(x_train, y_train)
 
-        scaler = StandardScaler()
         patient_data = scaler.fit_transform(patient_data)
 
         self.__strokePredictedResult = knn_model.predict(patient_data)
+
+        self.__strokePredictedResult = [(self.__strokePredictedResult)[0]]
+
+
+    def resultToDict(self, patient_data_dataframe):
+        dict_patient_sample = {}
+
+        patient_dict = patient_data_dataframe.to_dict()
+
+        dict_patient_sample[0] = self.__strokePredictedResult[0]
+
+        patient_dict["stroke"] = dict_patient_sample
+
+        df = pd.DataFrame.from_dict(patient_dict)
+
+        return df
+
 
     def getPredictedResult(self):
         return self.__strokePredictedResult
 
 
-
-
 if __name__ == "__main__":
     dataframe = CreateDataframe("stroke_data.csv").getDataframe()
 
-    patient_dataframe = CreateDataframe("PatientData.csv").getDataframe()
+    patient_data_dataframe = CreateDataframe("PatientData.csv").getDataframe()
 
-    patient_dataframe = patient_dataframe[patient_dataframe.columns[:]].values
+    s = TrainStrokeModel(dataframe, patient_data_dataframe.copy(deep = True))
 
-    stroke_result = TrainStrokeModel(
-        dataframe, patient_dataframe).getPredictedResult()
+    df = s.resultToDict(patient_data_dataframe)
 
-    SavingPredictedResults("StrokeResults.csv",
-                           stroke_result).saveToFile()
+    DiseaseFile().saveToFile("StrokeResults.csv", df)
