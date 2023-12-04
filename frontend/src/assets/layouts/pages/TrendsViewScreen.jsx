@@ -482,7 +482,10 @@ class TrendsViewScreen extends Component {
 
 
     const charts = [
-      <Chart key={1} options={chartOptions_one} series={chartOptions_one.series} type="line" height={450} width={800} />,
+      <Chart key={1} options={chartOptions_one} series={chartOptions_one.series} type="line" height={450} width={800} 
+        
+      
+      />,
       <Chart key={2} options={chartOptions_two} series={chartOptions_two.series} type="line" height={450} width={800} />,
       <Chart key={3} options={chartOptions_three} series={chartOptions_three.series} type="line" height={450} width={800} />,
     ];
@@ -549,7 +552,8 @@ class TrendsViewScreen extends Component {
                         </div>
                         {currentChart}
                         <div className='flex gap-4'>
-                          <Button variant='outlined' onClick={this.handlePrevPage} disabled={this.state.currentPage === 1}>
+                          <Button variant='outlined' onClick={this.handlePrevPage} disabled={this.state.currentPage === 1}
+                          >
                             Previous Chart
                           </Button>
                           <Button variant='outlined' onClick={this.handleNextPage} disabled={this.state.currentPage === charts.length}>

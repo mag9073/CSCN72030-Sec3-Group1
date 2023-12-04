@@ -17,11 +17,13 @@
     "@mui/icons-material": "^5.14.18",
     "@mui/material": "^5.14.18",
     "apexcharts": "^3.44.0",
+    "chai": "^4.3.10",
     "react": "^18.2.0",
     "react-apexcharts": "^1.4.1",
     "react-dom": "^18.2.0",
     "react-papaparse": "^4.4.0",
-    "react-router-dom": "^6.19.0"
+    "react-router-dom": "^6.19.0",
+    "selenium-webdriver": "^4.15.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.1.4",

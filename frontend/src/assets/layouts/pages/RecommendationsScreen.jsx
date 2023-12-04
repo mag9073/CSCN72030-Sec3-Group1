@@ -157,6 +157,9 @@ export default class RecommendationsScreen extends Component {
                 <div className={darkModeClass}>
                   <Layout>
                     <main className={`flex items-center flex-col gap-4 md:h-4/6 ${darkModeClass}`} style={{ fontSize: `${fontSize}px` }}>
+                      <div className='flex '>
+                            <h2 className='font-semibold text-4xl'>View Recommendations</h2>
+                          </div>
                       <div className='flex gap-20 md:w-10/12 justify-between items-center flex-col md:flex-row'>
                         <div className='flex flex-col gap-10'>
                           <Button
@@ -164,7 +167,7 @@ export default class RecommendationsScreen extends Component {
                             startIcon={<ArrowBackIosIcon />}
                             onClick={() => this.handleNavigate('/profile/dataview')}
                           >
-                            Patient Search
+                            Go Back
                           </Button>
                         </div>
                       </div>

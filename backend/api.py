@@ -1,5 +1,5 @@
 import time
-from flask import Flask
+from flask import Flask, Response
 # from KNN.KNNDiabetes.DiabetesKNNModule import CreateDataframe, ReadingPatientFile, TrainDiabeticModel, SavingPredictedResults
 import os
 import sys
@@ -134,7 +134,7 @@ def get_stroke_prediction():
 
     return jsonify({"message": "Stroke Prediction completed successfully"})
 
-@app.route('/authenticate', methods=['POST'])
+@app.route('/authenticate', methods=['POST']) # type: ignore
 def get_authentication():
        
     data = request.get_json()
@@ -171,9 +171,9 @@ def get_authentication():
         return jsonify({"message": "Login successful"}), 200
     else:
         if not auth_instance.authenticate_username():
-            return jsonify({"message": "Username not found"}), 401
+            return jsonify({"message": "The entered username does not exist"}), 401
         elif not auth_instance.authenticate_password():
-            return jsonify({"message": "Password incorrect"}), 401
+            return jsonify({"message": "The entered password is incorrect"}), 401
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -32,7 +32,7 @@ export default class Layout extends React.Component {
                 {/* Create Title */}
                 <h1 className=' font-semibold text-4xl'>RiskAlert</h1>
                 {/* Create Greeting Message */}
-                <p className=' text-2xl'>{`Welcome Back! Allision Brown, MD`}</p>
+               
             </div>
             
             {/* Right items */}

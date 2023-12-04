@@ -106,7 +106,7 @@ class PatientProfileScreen extends React.Component {
                                 style={{backgroundColor: '#156548'}}
                               
                               >
-                                View Lab Results & Risk Percentage
+                                View Lab Results & Risk 
                               </Button>
                               <Button
                                 variant="contained"

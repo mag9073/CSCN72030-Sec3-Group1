@@ -106,7 +106,7 @@ class ApexChart extends React.Component {
               item.BMI,
               item.DiabetesPedigreeFunction,
               item.Age,
-              item.Outcome,
+              item.Outcome
             ]
           }));
       
@@ -133,8 +133,6 @@ class ApexChart extends React.Component {
             data: [
               item.Age,
               item.Sex,  // Add other necessary fields for HeartFailureResults
-              item.ChestPainType,
-              item.RestingBP,
               item.Cholesterol,
               item.FastingBS,
               item.RestingECG,
@@ -142,6 +140,8 @@ class ApexChart extends React.Component {
               item.ExerciseAngina,
               item.Oldpeak,
               item.ST_Slope,
+              item.ChestPainType,
+              item.RestingBP,
               item.HeartDisease,
             ]
           }));
@@ -210,19 +210,19 @@ class ApexChart extends React.Component {
     if (currentSeries === 'diabetesSeries') {
       seriesToDisplay = this.state.diabetesSeries;
       dynamicXAxisCategories = [
-        'Pregnancies', 'Blood Glucose', 'Blood Pressure', 'SkinThickness', 'Insulin', 'BMI', 'DiabetesPredigreeFunction', 'Age'
+        'Pregnancies (0 = Yes | 1 = No) ', 'Blood Glucose (mg/dL)', 'Blood Pressure (mmHg)', 'SkinThickness (mm)', 'Insulin (pmol/L)', 'BMI (kg/m2)'
       ];
       titleName === 'Patient Blood Results - Diabetes'
     } else if (currentSeries === 'heartfailureSeries') {
       seriesToDisplay = this.state.heartFailureSeries;
       dynamicXAxisCategories = [
-        'Age', 'Sex', 'ChestPainType', 'RestingBP', 'Cholesterol', 'FastingBS', 'RestingECG', 'MaxHR', 'ExerciseAngina', 'Oldpeak', 'ST_Slope', 'HeartDisease'
+        'Age', 'Sex', 'Cholesterol (mg)', 'FastingBS (mg/dL)', 'RestingECG (ms)', 'MaxHR (bpm)', 'ExerciseAngina', 'Oldpeak', 'ST_Slope'
       ];
 
       titleName === 'Patient Blood Results - Heart Failure'
     } else if (currentSeries === 'strokeSeries') {
       seriesToDisplay = this.state.strokeSeries;
-      dynamicXAxisCategories = ['sex', 'age', 'hypertension', 'heart_disease', 'ever_married', 'work_type', 'residence_type', 'avg_glucose_level', 'bmi', 'smoking_status', 'stroke'];
+      dynamicXAxisCategories = ['sex', 'age', 'hypertension', 'heart_disease', 'ever_married', 'work_type', 'residence_type', 'avg_glucose_level', 'bmi', 'smoking_status'];
       titleName === 'Patient Blood Results - Stroke'
     }
 
@@ -480,6 +480,9 @@ export default class DataView extends Component {
                 <div className={darkModeClass}>
                   <Layout>
                     <main className={`flex items-center flex-col gap-4 md:h-4/6 ${darkModeClass}`} style={{ fontSize: `${fontSize}px` }}>
+                      <div className='flex '>
+                            <h2 className='font-semibold text-4xl'>View Lab Results and Risk</h2>
+                          </div>
                       <div className='flex gap-20 md:w-10/12 justify-between items-center flex-col md:flex-row'>
                         <div className='flex flex-col gap-10'>
                           <Button
@@ -487,7 +490,7 @@ export default class DataView extends Component {
                             startIcon={<ArrowBackIosIcon />}
                             onClick={() => this.handleNavigate('/profile')}
                           >
-                            Patient Search
+                            Patient Profile
                           </Button>
                           {/* <Button
                             variant="contained"
@@ -500,7 +503,7 @@ export default class DataView extends Component {
                         </div>
                       </div>
                       <div className=' md:w-9/12'>
-                        <ApexChart currentSeries={currentSeries} isDarkMode={isDarkMode} onOutcomeChange={(outcome, seriesType, outcomeField) => this.handleOutcomeChange(outcome, seriesType, outcomeField)}/>
+                        <ApexChart currentSeries={currentSeries} isDarkMode={isDarkMode} onOutcomeChange={(outcome, seriesType, outcomeField) => this.handleOutcomeChange(outcome, seriesType, outcomeField)} height={450} width={800} />
                         {/* Diabetes Prediction Results */}
 
 
@@ -509,7 +512,7 @@ export default class DataView extends Component {
                         <div className='series-buttons flex'>
                           {this.renderSeriesButtons()}
                         </div>
-                        <div className='flex flex-row gap-8 justify-center items-center'>
+                        <div className='flex flex-row gap-8 justify-around items-center'>
                           <div>
                             {/* <p>{`${currentSeries === 'diabetesSeries' ? 'Diabetes' : 'Heart Failure'} Prediction Resources:`}</p> */}
                             <Button
