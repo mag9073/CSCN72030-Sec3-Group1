@@ -114,6 +114,7 @@ export default class LoginScreen extends UIModule {
                 name="username"
                 value={username}
                 onChange={this.handleInputChange}
+                inputProps={{ maxLength: 10 }}
               />
             </div>
             <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
@@ -128,6 +129,7 @@ export default class LoginScreen extends UIModule {
                 name="password"
                 value={password}
                 onChange={this.handleInputChange}
+                inputProps={{ maxLength: 10 }}
               />
             </div>
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1rem' }}>

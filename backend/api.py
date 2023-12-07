@@ -160,6 +160,8 @@ def get_authentication():
     f = File("FileModule/AuthenticationFile/credentials.csv")
 
     # Retreive username and password from the Input object
+    # input_module.get_username_from_user()
+    # input_module.get_password_from_user()
     username_input = input_module.get_username()
     password_input = input_module.get_password()
 
