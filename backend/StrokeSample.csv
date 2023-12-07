@@ -1,0 +1,4 @@
+Year,sex,age,hypertension,heart_disease,ever_married,work_type,Residence_type,avg_glucose_level,bmi,smoking_status,stroke
+one year,0.0,76.0,0.0,0.0,1.0,2.0,1.0,68.19,31.0,0.0,0.0
+six months,0.0,70.0,0.0,1.0,1.0,4.0,1.0,91.92,35.9,1.0,1.0
+three months,0.0,59.0,0.0,0.0,1.0,4.0,0.0,71.16,46.5,1.0,0.0
