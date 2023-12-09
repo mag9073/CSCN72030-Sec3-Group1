@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { Navigate } from 'react-router-dom';
-import UIModule from '../UIModule';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
-export default class LoginScreen extends UIModule {
+export default class LoginScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {

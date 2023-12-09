@@ -1,11 +1,11 @@
 import React from 'react';
 import Layout from '../Layout';
 import Searchbar from '../../components/Searchbar';
-import UIModule from '../UIModule';
+
 import { DarkModeContext } from '../../states/DarkModeContext';
 import { PatientContext } from '../../states/PatientContext';
 
-class DashboardScreen extends UIModule {
+class DashboardScreen extends React.Component {
   static contextType = PatientContext;
 
   componentDidMount() {

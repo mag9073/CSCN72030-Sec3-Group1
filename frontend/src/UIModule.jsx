@@ -13,7 +13,7 @@ import ErrorScreen from './assets/layouts/pages/ErrorScreen';
 import RecommendationsScreen from './assets/layouts/pages/RecommendationsScreen';
 import PatientContextProvider from './assets/states/PatientContext';
 
-class App extends React.Component {
+class UIModule extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -73,4 +73,4 @@ class App extends React.Component {
   }
 }
 
-export default App;
+export default UIModule;
