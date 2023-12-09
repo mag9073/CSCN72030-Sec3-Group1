@@ -160,7 +160,7 @@ class IntegrationTest (unittest.TestCase):
 
   # Test #7: This test case tests the authenticate_username method of the Authentication class to verify that this method will return False if the entered username by the user does not exist in the authentication file
 
-    def test_authenticatie_username_False(self):
+    def test_authenticate_username_False(self):
 
         # Arrange
         self.input7 = Input()
@@ -192,7 +192,7 @@ class IntegrationTest (unittest.TestCase):
 
     # Test #8: This test case tests the authenticate_username method of the Authentication class to verify that this method will return True if the entered username by the user does exist in the authentication file and is valid
 
-    def test_authenticatie_username_True(self):
+    def test_authenticate_username_True(self):
 
         # Arrange
         self.input8 = Input()
@@ -223,7 +223,7 @@ class IntegrationTest (unittest.TestCase):
 
     # Test #9: This test case tests the authenticate_password method of the Authentication class to verify that this method will return False if the entered password by the user does not match the username
 
-    def test_authenticatie_password_False(self):
+    def test_authenticate_password_False(self):
 
         # Arrange
         self.input9 = Input()
@@ -255,7 +255,7 @@ class IntegrationTest (unittest.TestCase):
 
     # Test #10: This test case tests the authenticate_password method of the Authentication class to verify that this method will return True if the entered password by the user matches the username
 
-    def test_authenticatie_password_True(self):
+    def test_authenticate_password_True(self):
 
         # Arrange
         self.input10 = Input()
