@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { DarkModeContext } from '../../states/DarkModeContext';
 import { FontSizeContext } from '../../states/FontSizeContext';
-import UIModule from '../UIModule';
 import Layout from '../Layout';
 import { Typography, Button, Container, Paper } from '@mui/material';
 
