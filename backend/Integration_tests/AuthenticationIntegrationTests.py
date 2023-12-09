@@ -14,7 +14,7 @@ try:
     from backend.FileModule.FileSuperClass.File import File
 
     from backend.InputModule.Input_Module_Python import Input
-    from backend.Authentication.AuthenticationModule import Authentication
+    from backend.AuthenticationModule.AuthenticationModule import Authentication
 except ModuleNotFoundError as e:
     print(f"Error importing modules: {e}")
 
@@ -80,7 +80,7 @@ class IntegrationTest (unittest.TestCase):
         # creating a File object
         self.file3 = AuthenticationFile()
         f = File(
-            "D:/Group1_Project3/CSCN72030-Sec3-Group1/backend/FileModule/AuthenticationFile/credentials.csv")  # should be replaced with the directory that the project is stored in
+            "D:/Project3_Group1/CSCN72030-Sec3-Group1/backend/FileModule/AuthenticationFile/credentials.csv")  # should be replaced with the directory that the project is stored in
         user_credentials = (
             self.file3).readFromDoctorAuthenticatorFile(f.getFilename())  # getting the content of the credentials.csv as a dictionary
 
@@ -142,7 +142,7 @@ class IntegrationTest (unittest.TestCase):
         # creating a File object
         self.file6 = AuthenticationFile()
         f = File(
-            "D:/Group1_Project3/CSCN72030-Sec3-Group1/backend/FileModule/AuthenticationFile/credentials.csv")  # should be replaced with the directory that the project is stored in
+            "D:/Project3_Group1/CSCN72030-Sec3-Group1/backend/FileModule/AuthenticationFile/credentials.csv")  # should be replaced with the directory that the project is stored in
         user_credentials = (
             self.file6).readFromDoctorAuthenticatorFile(f.getFilename())  # getting the content of the credentials.csv as a dictionary
 
@@ -165,22 +165,22 @@ class IntegrationTest (unittest.TestCase):
         # Arrange
         self.input7 = Input()
         # intializing the username and password attributes of the Input class (resembeling the values entered by the user)
-        self.input7.set_username("wrongusername")
-        self.input7.set_password("1111111*")
+        self.input7.set_username("Student123")
+        self.input7.set_password("Student123")
         username_input = self.input7.get_username()
-        password_input = self.input7.get_password()
 
         # creating a File object
         self.file7 = AuthenticationFile()
         f = File(
-            "D:/Group1_Project3/CSCN72030-Sec3-Group1/backend/FileModule/AuthenticationFile/credentials.csv")
+            "D:/Project3_Group1/CSCN72030-Sec3-Group1/backend/FileModule/AuthenticationFile/credentials.csv")
         user_credentials = (
             self.file7).readFromDoctorAuthenticatorFile(f.getFilename())  # getting the content of the credentials.csv as a dictionary
 
         # intantiating and initailizing the authentication object using its constructor
         # and the returned values from the Input and File modules
-        self.auth7 = Authentication(
-            username_input, password_input, user_credentials)
+        self.auth7 = Authentication()
+        self.auth7.set_username(username_input)
+        self.auth7.set_data_map(user_credentials)
 
         # Act
         # call the authenticate_username function and save the result
@@ -198,21 +198,20 @@ class IntegrationTest (unittest.TestCase):
         self.input8 = Input()
         # intializing the username and password attributes of the Input class (resembeling the values entered by the user)
         self.input8.set_username("serb")
-        self.input8.set_password("1111111*")
         username_input = self.input8.get_username()
-        password_input = self.input8.get_password()
 
         # creating a File object
         self.file8 = AuthenticationFile()
         f = File(
-            "D:/Group1_Project3/CSCN72030-Sec3-Group1/backend/FileModule/AuthenticationFile/credentials.csv")
+            "D:/Project3_Group1/CSCN72030-Sec3-Group1/backend/FileModule/AuthenticationFile/credentials.csv")
         user_credentials = (
             self.file8).readFromDoctorAuthenticatorFile(f.getFilename())  # getting the content of the credentials.csv as a dictionary
 
         # intantiating and initailizing the authentication object using its constructor
         # and the returned values from the Input and File modules
-        self.auth8 = Authentication(
-            username_input, password_input, user_credentials)
+        self.auth8 = Authentication()
+        self.auth8.set_username(username_input)
+        self.auth8.set_data_map(user_credentials)
 
         # Act
         # call the authenticate_username function and save the result
@@ -230,14 +229,14 @@ class IntegrationTest (unittest.TestCase):
         self.input9 = Input()
         # intializing the username and password attributes of the Input class (resembeling the values entered by the user)
         self.input9.set_username("serb")
-        self.input9.set_password("1111111*")
+        self.input9.set_password("Fall2023*")
         username_input = self.input9.get_username()
         password_input = self.input9.get_password()
 
         # creating a File object
         self.file9 = AuthenticationFile()
         f = File(
-            "D:/Group1_Project3/CSCN72030-Sec3-Group1/backend/FileModule/AuthenticationFile/credentials.csv")
+            "D:/Project3_Group1/CSCN72030-Sec3-Group1/backend/FileModule/AuthenticationFile/credentials.csv")
         user_credentials = (
             self.file9).readFromDoctorAuthenticatorFile(f.getFilename())  # getting the content of the credentials.csv as a dictionary
 
@@ -259,28 +258,28 @@ class IntegrationTest (unittest.TestCase):
     def test_authenticatie_password_True(self):
 
         # Arrange
-        self.input9 = Input()
+        self.input10 = Input()
         # intializing the username and password attributes of the Input class (resembeling the values entered by the user)
-        self.input9.set_username("serb")
-        self.input9.set_password("erbsierra02*")
-        username_input = self.input9.get_username()
-        password_input = self.input9.get_password()
+        self.input10.set_username("serb")
+        self.input10.set_password("erbsierra02*")
+        username_input = self.input10.get_username()
+        password_input = self.input10.get_password()
 
         # creating a File object
         self.file9 = AuthenticationFile()
         f = File(
-            "D:/Group1_Project3/CSCN72030-Sec3-Group1/backend/FileModule/AuthenticationFile/credentials.csv")
+            "D:/Project3_Group1/CSCN72030-Sec3-Group1/backend/FileModule/AuthenticationFile/credentials.csv")
         user_credentials = (
             self.file9).readFromDoctorAuthenticatorFile(f.getFilename())  # getting the content of the credentials.csv as a dictionary
 
         # intantiating and initailizing the authentication object using its constructor
         # and the returned values from the Input and File modules
-        self.auth9 = Authentication(
+        self.auth10 = Authentication(
             username_input, password_input, user_credentials)
 
         # Act
         # call the authenticate_password function and save the result
-        actual_result = self.auth9.authenticate_password()
+        actual_result = self.auth10.authenticate_password()
 
         # Assert
         expected_result = True
@@ -301,7 +300,7 @@ class IntegrationTest (unittest.TestCase):
         # creating a File object
         self.file6 = AuthenticationFile()
         f = File(
-            "D:/Group1_Project3/CSCN72030-Sec3-Group1/backend/FileModule/AuthenticationFile/credentials.csv")
+            "D:/Project3_Group1/CSCN72030-Sec3-Group1/backend/FileModule/AuthenticationFile/credentials.csv")
         user_credentials = (
             self.file6).readFromDoctorAuthenticatorFile(f.getFilename())  # getting the content of the credentials.csv as a dictionary
 
