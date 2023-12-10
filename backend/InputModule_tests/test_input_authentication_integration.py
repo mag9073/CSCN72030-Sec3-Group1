@@ -142,3 +142,6 @@ class TestInput(unittest.TestCase):
         # Assert 
         self.assertEqual(actual_username_from_input, username_from_ui)
         self.assertEqual(actual_password_from_input, password_from_ui)
+
+if __name__ == '__main__':
+    unittest.main()
