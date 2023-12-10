@@ -127,6 +127,12 @@ Flask Library:
 
 ``pip install Flask``
 
+Flask Cors Library:
+
+``pip install Flask-Cors``
+
+
+
 Running the localhost server for the backend:
 
 -confirm that you are in the root of the backend folder
