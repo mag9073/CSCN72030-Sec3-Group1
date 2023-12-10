@@ -3,7 +3,7 @@ import { Navigate } from 'react-router-dom';
 import SettingsDialog from '../components/SettingsDialog';
 import HelpDialog from '../components/HelpDialog';
 
-export default class Layout extends React.Component {
+export default class Layout extends L {
 
     constructor(props) {
         super(props);
