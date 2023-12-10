@@ -3,12 +3,11 @@ import { Navigate } from 'react-router-dom';
 import Layout from '../Layout';
 import Button from '@mui/material/Button';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import UIModule from '../UIModule';
 import { DarkModeContext } from '../../states/DarkModeContext';
 import { FontSizeContext } from '../../states/FontSizeContext';
 import { Slider, Switch } from '@mui/material';
 
-export default class SettingsScreen extends UIModule {
+export default class SettingsScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {

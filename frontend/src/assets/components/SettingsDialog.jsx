@@ -7,9 +7,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { DarkModeContext } from '../states/DarkModeContext';
 import { FontSizeContext } from '../states/FontSizeContext';
 import { Box, Slider, Switch } from '@mui/material';
-import UIModule from '../layouts/UIModule';
 
-class SettingsDialog extends UIModule {
+class SettingsDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
